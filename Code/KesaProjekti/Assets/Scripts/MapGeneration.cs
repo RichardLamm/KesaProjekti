@@ -25,8 +25,7 @@ public class MapGeneration : MonoBehaviour {
             return;
         }
         else if(length == -1) {
-            Debug.Log("spawning tile at " + x + ", " + y);
-            length = Random.Range(2, 10); }
+            length = Random.Range(5, 10); }
         else
         {
             if(Random.Range(1,10) > 6) { length -= 1; }
@@ -37,7 +36,7 @@ public class MapGeneration : MonoBehaviour {
         // Create grass tile on current position
         map.SetTile(new Vector3Int(x, y, 0), grass);
 
-        if (x != 0)     // not leftmost tile
+        if (x > -13)     // not leftmost tile
         {
             if (map.GetTile(new Vector3Int(x - 1, y, 0)) != null)
             {
@@ -51,7 +50,7 @@ public class MapGeneration : MonoBehaviour {
                 GenerateMap(length, x - 1, y);
             }
         }
-        if (x != 10)    // not rightmost tile
+        if (x < 12)    // not rightmost tile
         {
             if (map.GetTile(new Vector3Int(x + 1, y, 0)) != null)
             {
@@ -65,7 +64,7 @@ public class MapGeneration : MonoBehaviour {
                 GenerateMap(length, x + 1, y);
             }
         }
-        if (y != 0)     // not bottom tile
+        if (y > -5)     // not bottom tile
         {
             if (map.GetTile(new Vector3Int(x, y - 1, 0)) != null)
             {
@@ -79,7 +78,7 @@ public class MapGeneration : MonoBehaviour {
                 GenerateMap(length, x, y - 1);
             }
         }
-        if (y != 10)     // not topline tile
+        if (y < 4)     // not topline tile
         {
             if (map.GetTile(new Vector3Int(x, y + 1, 0)))
             {
