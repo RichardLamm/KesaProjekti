@@ -8,89 +8,111 @@ public class MapGeneration : MonoBehaviour {
 
     public Tilemap map;
     public Tile grass;
+    public Tile ground;
+    private int minX = -50;
+    private int maxX = 49;
+    private int minY = -25;
+    private int maxY = 24;
+    private enum direction {none, north, northeast, east, southeast, south, southwest, west, northwest};
 
 	// Use this for initialization
 	void Start () {
-        GenerateMap(-1, Random.Range(-10, 10), Random.Range(-5, 5));
-	}
+        GenerateMap(12, 10, 10, ground);
+        GenerateMap(12, -10, 10, ground);
+        GenerateMap(12, 10, -10, ground);
+        GenerateMap(12, -10, -10, ground);
+        GenerateMap(20, 0, 0, ground);
+        for (int i = 0; i < Random.Range(7, 15); i++)
+        {
+            int tempX = Random.Range(minX, maxX);
+            int tempY = Random.Range(minY, maxY);
+            GenerateMap(Random.Range(5, 15), tempX, tempY, grass, true);
+        }
+    }
 	
 	// Update is called once per frame
 	void Update () {
 		
 	}
 
-    void GenerateMap(int length, int x, int y)
+    void GenerateMap(int length, int x, int y, Tile tile, bool onExisting = false)
     {
-        if(length == 0) {
-            return;
-        }
-        else if(length == -1) {
-            length = Random.Range(5, 10); }
-        else
+        Debug.Log(length);
+        if (Random.Range(1, 10) > 5) { length -= 1; }
+        length -= 1;
+        if (length <= 0) { return; }
+
+        // Create tile on current position
+        if (!onExisting && map.GetTile(new Vector3Int(x, y, 0)) != tile)
         {
-            if(Random.Range(1,10) > 6) { length -= 1; }
-            length -= 1;
-            if(length <= 0) { return; }
+            map.SetTile(new Vector3Int(x, y, 0), tile);
+        }
+        else if(onExisting && map.GetTile(new Vector3Int(x, y, 0)) != null)
+        {
+            map.SetTile(new Vector3Int(x, y, 0), tile);
         }
 
-        // Create grass tile on current position
-        map.SetTile(new Vector3Int(x, y, 0), grass);
+        bool TilesAdded = false;
 
-        if (x > -13)     // not leftmost tile
+        if (y < maxY)   // north
         {
-            if (map.GetTile(new Vector3Int(x - 1, y, 0)) != null)
+            for (int north = 1; north < length + Random.Range(0,2); north++)
             {
-                if(!map.GetTile(new Vector3Int(x - 1, y, 0)).name.Contains("grass"))
+                if (map.GetTile(new Vector3Int(x, y + north, 0)) != tile && y + north < maxY)
                 {
-                    GenerateMap(length, x - 1, y);
+                    if (onExisting && map.GetTile(new Vector3Int(x, y + north, 0)) == null){ break; }
+                    TilesAdded = true;
+                    map.SetTile(new Vector3Int(x, y + north, 0), tile);
                 }
-            }
-            else
-            {
-                GenerateMap(length, x - 1, y);
+                else { break; }
             }
         }
-        if (x < 12)    // not rightmost tile
+        if (x > minX)     // west
         {
-            if (map.GetTile(new Vector3Int(x + 1, y, 0)) != null)
+            for (int west = 1; west < length + Random.Range(0, 2); west++)
             {
-                if (!map.GetTile(new Vector3Int(x + 1, y, 0)).name.Contains("grass"))
+                if (map.GetTile(new Vector3Int(x - west, y, 0)) != tile && x - west > minX)
                 {
-                    GenerateMap(length, x + 1, y);
+                    if (onExisting && map.GetTile(new Vector3Int(x - west, y, 0)) == null) { break; }
+                    TilesAdded = true;
+                    map.SetTile(new Vector3Int(x - west, y, 0), tile);
                 }
-            }
-            else
-            {
-                GenerateMap(length, x + 1, y);
+                else { break; }
             }
         }
-        if (y > -5)     // not bottom tile
+        if (y > minY)   // south
         {
-            if (map.GetTile(new Vector3Int(x, y - 1, 0)) != null)
+            for (int south = 1; south < length + Random.Range(0, 2); south++)
             {
-                if (!map.GetTile(new Vector3Int(x, y - 1, 0)).name.Contains("grass"))
+                if (map.GetTile(new Vector3Int(x, y - south, 0)) != tile && y - south > minY)
                 {
-                    GenerateMap(length, x, y - 1);
+                    if (onExisting && map.GetTile(new Vector3Int(x, y - south, 0)) == null) { break; }
+                    TilesAdded = true;
+                    map.SetTile(new Vector3Int(x, y - south, 0), tile);
                 }
-            }
-            else
-            {
-                GenerateMap(length, x, y - 1);
+                else { break; }
             }
         }
-        if (y < 4)     // not topline tile
+        if (x > minX)     // west
         {
-            if (map.GetTile(new Vector3Int(x, y + 1, 0)))
+            for (int east = 1; east < length + Random.Range(0, 2); east++)
             {
-                if (!map.GetTile(new Vector3Int(x, y + 1, 0)).name.Contains("grass"))
+                if (map.GetTile(new Vector3Int(x + east, y, 0)) != tile && x - east < maxX)
                 {
-                    GenerateMap(length, x, y + 1);
+                    if (onExisting && map.GetTile(new Vector3Int(x + east, y, 0)) == null) { break; }
+                    TilesAdded = true;
+                    map.SetTile(new Vector3Int(x + east, y, 0), tile);
                 }
+                else { break; }
             }
-            else
-            {
-                GenerateMap(length, x, y + 1);
-            }
+        }
+
+        if (TilesAdded)
+        {
+            if (y < maxY) { GenerateMap(length, x, y - 1, tile, onExisting); }
+            if (y > minY) { GenerateMap(length, x, y + 1, tile, onExisting); }
+            if (x < maxX) { GenerateMap(length, x - 1, y, tile, onExisting); }
+            if (x < minX) { GenerateMap(length, x + 1, y, tile, onExisting); }
         }
     }
 }

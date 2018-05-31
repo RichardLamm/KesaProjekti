@@ -480,6 +480,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   map: {fileID: 455596050}
   grass: {fileID: 11400000, guid: aa41530d956895c48a58bfb59139e069, type: 2}
+  ground: {fileID: 11400000, guid: 1e742c1d47fc9374fa15f85284f07083, type: 2}
 --- !u!1 &1842029046
 GameObject:
   m_ObjectHideFlags: 0
