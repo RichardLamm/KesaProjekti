@@ -30,7 +30,7 @@ public class MapGeneration : MonoBehaviour {
         //    GenerateMap(Random.Range(5, 15), tempX, tempY, grass, true);
         //}
 
-        GenerateRandomLine(randomLength, -1, 0, 0, water);
+        GenerateRandomLine(randomLength, Random.Range(1, 9), 0, 0, water);
     }
 	
 	// Update is called once per frame
@@ -149,7 +149,7 @@ public class MapGeneration : MonoBehaviour {
         return value;
     }
 
-    void GenerateRandomLine(int length, int previous, int x, int y, Tile tile)
+    void GenerateRandomLine(int length, int Direction, int x, int y, Tile tile)
     {
         if (length < 0)
         {
@@ -161,7 +161,7 @@ public class MapGeneration : MonoBehaviour {
             map.SetTile(new Vector3Int(x, y, 1), tile);
             length--;
         }
-        int rnd = Random.Range(0, 4);
+        int rnd = ChooseDirection(Direction);
 
         switch (rnd)
         {
@@ -169,14 +169,13 @@ public class MapGeneration : MonoBehaviour {
                 if (map.GetTile(new Vector3Int(x, y + 1, 1)) == tile || map.GetTile(new Vector3Int(x + 1, y + 1, 1)) == tile ||
                     map.GetTile(new Vector3Int(x - 1, y + 1, 1)) == tile || map.GetTile(new Vector3Int(x, y + 2, 1)) == tile)
                 {
-                    rnd = Random.Range(0, 4);
+                    rnd = ChooseDirection(Direction);
 
-
-                    GenerateRandomLine(length, rnd, x, y, tile);
+                    GenerateRandomLine(length, Direction, x, y, tile);
                 }
                 else if (map.GetTile(new Vector3Int(x, y + 1, 1)) != tile)
                 {
-                    GenerateRandomLine(length, rnd, x, y + 1, tile);
+                    GenerateRandomLine(length, Direction, x, y + 1, tile);
                 }
                 break;
             case 1:
@@ -184,41 +183,78 @@ public class MapGeneration : MonoBehaviour {
                 if (map.GetTile(new Vector3Int(x + 1, y, 1)) == tile || map.GetTile(new Vector3Int(x + 1, y - 1, 1)) == tile ||
                     map.GetTile(new Vector3Int(x + 1, y + 1, 1)) == tile || map.GetTile(new Vector3Int(x + 2, y, 1)) == tile)
                 {
-                    rnd = Random.Range(0, 4);
-                    GenerateRandomLine(length, rnd, x, y, tile);
+                    rnd = ChooseDirection(Direction);
+                    GenerateRandomLine(length, Direction, x, y, tile);
                 }
                 else if (map.GetTile(new Vector3Int(x + 1, y, 1)) != tile)
                 {
-                    GenerateRandomLine(length, rnd, x + 1, y, tile);
+                    GenerateRandomLine(length, Direction, x + 1, y, tile);
                 }
                 break;
 
             case 2:
-                if (map.GetTile(new Vector3Int(x - 1, y, 1)) == tile || map.GetTile(new Vector3Int(x - 1, y - 1, 1)) == tile ||
-                    map.GetTile(new Vector3Int(x - 1, y + 1, 1)) == tile || map.GetTile(new Vector3Int(x - 2, y, 1)) == tile)
+                if (map.GetTile(new Vector3Int(x, y - 1, 1)) == tile || map.GetTile(new Vector3Int(x + 1, y - 1, 1)) == tile ||
+                    map.GetTile(new Vector3Int(x - 1, y - 1, 1)) == tile || map.GetTile(new Vector3Int(x, y - 2, 1)) == tile)
                 {
-                    rnd = Random.Range(0, 4);
-                    GenerateRandomLine(length, rnd, x, y, tile);
+                    rnd = ChooseDirection(Direction);
+                    GenerateRandomLine(length, Direction, x, y, tile);
                 }
-                else if (map.GetTile(new Vector3Int(x - 1, y, 1)) != tile)
+                else if (map.GetTile(new Vector3Int(x, y - 1, 1)) != tile)
                 {
-                    GenerateRandomLine(length, rnd, x - 1, y, tile);
+                    GenerateRandomLine(length, Direction, x, y - 1, tile);
                 }
                 break;
 
             case 3:
-                if (map.GetTile(new Vector3Int(x, y - 1, 1)) == tile || map.GetTile(new Vector3Int(x + 1, y - 1, 1)) == tile ||
-                    map.GetTile(new Vector3Int(x - 1, y - 1, 1)) == tile || map.GetTile(new Vector3Int(x, y - 2, 1)) == tile)
+                if (map.GetTile(new Vector3Int(x - 1, y, 1)) == tile || map.GetTile(new Vector3Int(x - 1, y - 1, 1)) == tile ||
+                    map.GetTile(new Vector3Int(x - 1, y + 1, 1)) == tile || map.GetTile(new Vector3Int(x - 2, y, 1)) == tile)
                 {
-                    rnd = Random.Range(0, 4);
-                    GenerateRandomLine(length, rnd, x, y, tile);
+                    rnd = ChooseDirection(Direction);
+                    GenerateRandomLine(length, Direction, x, y, tile);
                 }
-                else if (map.GetTile(new Vector3Int(x, y - 1, 1)) != tile)
+                else if (map.GetTile(new Vector3Int(x - 1, y, 1)) != tile)
                 {
-                    GenerateRandomLine(length, rnd, x, y - 1, tile);
+                    GenerateRandomLine(length, Direction, x - 1, y, tile);
                 }
                 break;
         }
+    }
+
+    int ChooseDirection(int direction)
+    {
+        int rnd = Random.Range(0, 6);
+        switch (direction)
+        {
+            case 1:
+                if (rnd > 3) { rnd = 0; }
+                break;
+            case 2:
+                if (rnd == 4) { rnd = 0; }
+                else if (rnd == 5) { rnd = 1; }
+                break;
+            case 3:
+                if (rnd > 3) { rnd = 1; }
+                break;
+            case 4:
+                if (rnd == 4) { rnd = 1; }
+                else if (rnd == 5) { rnd = 2; }
+                break;
+            case 5:
+                if (rnd > 3) { rnd = 2; }
+                break;
+            case 6:
+                if (rnd == 4) { rnd = 2; }
+                else if (rnd == 5) { rnd = 3; }
+                break;
+            case 7:
+                if (rnd > 3) { rnd = 3; }
+                break;
+            case 8:
+                if (rnd == 4) { rnd = 3; }
+                else if (rnd == 5) { rnd = 0; }
+                break;
+        }
+        return rnd;
     }
 
     //bool InRange(int x, int y)
