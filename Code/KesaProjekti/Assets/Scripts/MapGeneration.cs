@@ -125,7 +125,7 @@ public class MapGeneration : MonoBehaviour {
             for (int j = 0; j < height; j++)
             {
                 float depth = CalculateDepth(i, j);
-                if (depth <= groundTrigger) { map.SetTile(new Vector3Int(i - width / 2, j - height / 2, 0), water); }
+                //if (depth <= groundTrigger) { map.SetTile(new Vector3Int(i - width / 2, j - height / 2, 0), water); }
                 if (depth > groundTrigger) { map.SetTile(new Vector3Int(i - width / 2, j - height / 2, 0), ground); }
                 if (depth > grassTrigger) { map.SetTile(new Vector3Int(i - width / 2, j - height / 2, 0), grass); }
             }
