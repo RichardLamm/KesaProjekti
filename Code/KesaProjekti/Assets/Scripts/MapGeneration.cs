@@ -17,6 +17,7 @@ public class MapGeneration : MonoBehaviour {
     public float grassTrigger = 0.3f;
     public int offset = 0;
     private enum direction {none, north, northeast, east, southeast, south, southwest, west, northwest};
+    public int randomLength = 30;
 
 	// Use this for initialization
 	void Start () {
@@ -28,6 +29,8 @@ public class MapGeneration : MonoBehaviour {
         //    int tempY = Random.Range(-height/2, height/2);
         //    GenerateMap(Random.Range(5, 15), tempX, tempY, grass, true);
         //}
+
+        GenerateRandomLine(randomLength, -1, 0, 0, water);
     }
 	
 	// Update is called once per frame
@@ -145,4 +148,90 @@ public class MapGeneration : MonoBehaviour {
         //Debug.Log("(" + x + "," + y + ") " + xDif + " _ " + yDif + " _ " + value);
         return value;
     }
+
+    void GenerateRandomLine(int length, int previous, int x, int y, Tile tile)
+    {
+        if (length < 0)
+        {
+            return;
+        }
+
+        if ((map.GetTile(new Vector3Int(x, y, 1)) != tile))
+        {
+            map.SetTile(new Vector3Int(x, y, 1), tile);
+            length--;
+        }
+        int rnd = Random.Range(0, 4);
+
+        switch (rnd)
+        {
+            case 0:
+                if (map.GetTile(new Vector3Int(x, y + 1, 1)) == tile || map.GetTile(new Vector3Int(x + 1, y + 1, 1)) == tile ||
+                    map.GetTile(new Vector3Int(x - 1, y + 1, 1)) == tile || map.GetTile(new Vector3Int(x, y + 2, 1)) == tile)
+                {
+                    rnd = Random.Range(0, 4);
+
+
+                    GenerateRandomLine(length, rnd, x, y, tile);
+                }
+                else if (map.GetTile(new Vector3Int(x, y + 1, 1)) != tile)
+                {
+                    GenerateRandomLine(length, rnd, x, y + 1, tile);
+                }
+                break;
+            case 1:
+
+                if (map.GetTile(new Vector3Int(x + 1, y, 1)) == tile || map.GetTile(new Vector3Int(x + 1, y - 1, 1)) == tile ||
+                    map.GetTile(new Vector3Int(x + 1, y + 1, 1)) == tile || map.GetTile(new Vector3Int(x + 2, y, 1)) == tile)
+                {
+                    rnd = Random.Range(0, 4);
+                    GenerateRandomLine(length, rnd, x, y, tile);
+                }
+                else if (map.GetTile(new Vector3Int(x + 1, y, 1)) != tile)
+                {
+                    GenerateRandomLine(length, rnd, x + 1, y, tile);
+                }
+                break;
+
+            case 2:
+                if (map.GetTile(new Vector3Int(x - 1, y, 1)) == tile || map.GetTile(new Vector3Int(x - 1, y - 1, 1)) == tile ||
+                    map.GetTile(new Vector3Int(x - 1, y + 1, 1)) == tile || map.GetTile(new Vector3Int(x - 2, y, 1)) == tile)
+                {
+                    rnd = Random.Range(0, 4);
+                    GenerateRandomLine(length, rnd, x, y, tile);
+                }
+                else if (map.GetTile(new Vector3Int(x - 1, y, 1)) != tile)
+                {
+                    GenerateRandomLine(length, rnd, x - 1, y, tile);
+                }
+                break;
+
+            case 3:
+                if (map.GetTile(new Vector3Int(x, y - 1, 1)) == tile || map.GetTile(new Vector3Int(x + 1, y - 1, 1)) == tile ||
+                    map.GetTile(new Vector3Int(x - 1, y - 1, 1)) == tile || map.GetTile(new Vector3Int(x, y - 2, 1)) == tile)
+                {
+                    rnd = Random.Range(0, 4);
+                    GenerateRandomLine(length, rnd, x, y, tile);
+                }
+                else if (map.GetTile(new Vector3Int(x, y - 1, 1)) != tile)
+                {
+                    GenerateRandomLine(length, rnd, x, y - 1, tile);
+                }
+                break;
+        }
+    }
+
+    //bool InRange(int x, int y)
+    //{
+    //    if (x <= 0 || x >= width - 1)
+    //    {
+    //        return false;
+    //    }
+    //    if (y <= 0 || y >= height - 1)
+    //    {
+    //        return false;
+    //    }
+    //    return true;
+    //}
 }
+
