@@ -488,7 +488,7 @@ MonoBehaviour:
   groundTrigger: 0.005
   grassTrigger: 0.025
   offset: 1000
-  randomLength: 400
+  randomLength: 150
 --- !u!1 &1663373097
 GameObject:
   m_ObjectHideFlags: 0
@@ -517,12 +517,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c5cb3af6bd05509458a27b0c695a03c6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  textureWidth: 256
-  textureHeight: 256
+  textureWidth: 128
+  textureHeight: 128
   mapWidth: 640
   mapHeight: 480
   tileSize: 128
   scale: 150
+  animationSpeed: 1
 --- !u!212 &1663373099
 SpriteRenderer:
   m_ObjectHideFlags: 0

@@ -11,6 +11,7 @@ public class CreateTexture : MonoBehaviour
     public int mapHeight = 480;
     public int tileSize = 128;
     public float scale = 50f;
+    public float animationSpeed = 1f;
     private float offset;
     SpriteRenderer render;
 
@@ -23,7 +24,7 @@ public class CreateTexture : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        offset += Time.deltaTime * 5f;
+        offset += Time.deltaTime * animationSpeed;
         CreateWater();
     }
 
