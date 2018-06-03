@@ -149,6 +149,7 @@ public class MapGeneration : MonoBehaviour {
         return value;
     }
 
+    //A function that generates a randomized line
     void GenerateRandomLine(int length, int Direction, int x, int y, Tile tile)
     {
         if (length < 0 || map.GetTile(new Vector3Int(x, y, 0)) == null)
@@ -156,6 +157,7 @@ public class MapGeneration : MonoBehaviour {
             return;
         }
 
+        //The tile in the coordinates is checked, if it doesn't contain the same tile, a new tile is created and the length is reduced
         if ((map.GetTile(new Vector3Int(x, y, 1)) != tile))
         {
             map.SetTile(new Vector3Int(x, y, 1), tile);
@@ -185,17 +187,19 @@ public class MapGeneration : MonoBehaviour {
                 return;
             }
         }
-
+        //The direction of the next block is randomised. The main direction of the river/whatever 
+        //adds weight to the direction of the next block
         int rnd = ChooseDirection(Direction);
-
+        //Switch case on which direction the next tile will be placed
         switch (rnd)
         {
+            //Cases 0, 1, 2, 3 correspond to north, east, west and south.
+            //The first if checks that the next tile and the tiles adjacent to it are free. If they aren't, the function is called again with same parameters.
+            //Otherwise if the next tile (and its adjacent tiles) are free, the function is called with this new position
             case 0:
                 if (map.GetTile(new Vector3Int(x, y + 1, 1)) == tile || map.GetTile(new Vector3Int(x + 1, y + 1, 1)) == tile ||
                     map.GetTile(new Vector3Int(x - 1, y + 1, 1)) == tile || map.GetTile(new Vector3Int(x, y + 2, 1)) == tile)
                 {
-                    rnd = ChooseDirection(Direction);
-
                     GenerateRandomLine(length, Direction, x, y, tile);
                 }
                 else if (map.GetTile(new Vector3Int(x, y + 1, 1)) != tile)
@@ -208,7 +212,6 @@ public class MapGeneration : MonoBehaviour {
                 if (map.GetTile(new Vector3Int(x + 1, y, 1)) == tile || map.GetTile(new Vector3Int(x + 1, y - 1, 1)) == tile ||
                     map.GetTile(new Vector3Int(x + 1, y + 1, 1)) == tile || map.GetTile(new Vector3Int(x + 2, y, 1)) == tile)
                 {
-                    rnd = ChooseDirection(Direction);
                     GenerateRandomLine(length, Direction, x, y, tile);
                 }
                 else if (map.GetTile(new Vector3Int(x + 1, y, 1)) != tile)
@@ -221,7 +224,6 @@ public class MapGeneration : MonoBehaviour {
                 if (map.GetTile(new Vector3Int(x, y - 1, 1)) == tile || map.GetTile(new Vector3Int(x + 1, y - 1, 1)) == tile ||
                     map.GetTile(new Vector3Int(x - 1, y - 1, 1)) == tile || map.GetTile(new Vector3Int(x, y - 2, 1)) == tile)
                 {
-                    rnd = ChooseDirection(Direction);
                     GenerateRandomLine(length, Direction, x, y, tile);
                 }
                 else if (map.GetTile(new Vector3Int(x, y - 1, 1)) != tile)
@@ -234,7 +236,6 @@ public class MapGeneration : MonoBehaviour {
                 if (map.GetTile(new Vector3Int(x - 1, y, 1)) == tile || map.GetTile(new Vector3Int(x - 1, y - 1, 1)) == tile ||
                     map.GetTile(new Vector3Int(x - 1, y + 1, 1)) == tile || map.GetTile(new Vector3Int(x - 2, y, 1)) == tile)
                 {
-                    rnd = ChooseDirection(Direction);
                     GenerateRandomLine(length, Direction, x, y, tile);
                 }
                 else if (map.GetTile(new Vector3Int(x - 1, y, 1)) != tile)
@@ -254,6 +255,11 @@ public class MapGeneration : MonoBehaviour {
 
     int ChooseDirection(int direction)
     {
+        //The direction of the line is randomised.
+        //Cases 1, 3, 5 and 7 are main cardinal points (nort, east, south, west)
+        //2, 4, 6 and 8 are intercardinal directions (NE, SE, SW, NW)
+        //At the start a random number is generated between 0 and 5. 1-3 correspond to the cardinal directions, 
+        //while 4-5 are converted into cardinal directions according to the main direction
         int rnd = Random.Range(0, 6);
         switch (direction)
         {
@@ -288,18 +294,5 @@ public class MapGeneration : MonoBehaviour {
         }
         return rnd;
     }
-
-    //bool InRange(int x, int y)
-    //{
-    //    if (x <= 0 || x >= width - 1)
-    //    {
-    //        return false;
-    //    }
-    //    if (y <= 0 || y >= height - 1)
-    //    {
-    //        return false;
-    //    }
-    //    return true;
-    //}
 }
 
