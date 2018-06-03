@@ -670,7 +670,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1663373097}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c5cb3af6bd05509458a27b0c695a03c6, type: 3}
+  m_Script: {fileID: 11500000, guid: c8894792874fe634b978ba40a41c92eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   textureWidth: 128
