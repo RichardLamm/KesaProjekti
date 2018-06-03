@@ -12,6 +12,8 @@ public class CameraControls : MonoBehaviour {
     //The speed at which the camera moves
     public float moveSpeed = 5;
     public float scrollSpeed = 2;
+    public float minZoom = 1;
+    public float maxZoom = 15;
 
 	// Use this for initialization
 	void Start () {
@@ -23,7 +25,10 @@ public class CameraControls : MonoBehaviour {
         xAxis = Input.GetAxis("Horizontal");
         yAxis = Input.GetAxis("Vertical");
         zAxis = Input.GetAxis("Mouse ScrollWheel");
-        transform.position += new Vector3(xAxis, yAxis, 0) * Time.deltaTime * moveSpeed;        
+        transform.position += new Vector3(xAxis, yAxis, 0) * Time.deltaTime * moveSpeed;
+
+
         Camera.main.orthographicSize -= zAxis * scrollSpeed;
+        Camera.main.orthographicSize = Mathf.Clamp(Camera.main.orthographicSize, minZoom, maxZoom);
     }
 }
