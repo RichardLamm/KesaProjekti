@@ -151,7 +151,7 @@ public class MapGeneration : MonoBehaviour {
 
     void GenerateRandomLine(int length, int Direction, int x, int y, Tile tile)
     {
-        if (length < 0)
+        if (length < 0 || map.GetTile(new Vector3Int(x, y, 0)) == null)
         {
             return;
         }
@@ -161,6 +161,31 @@ public class MapGeneration : MonoBehaviour {
             map.SetTile(new Vector3Int(x, y, 1), tile);
             length--;
         }
+
+        // check if river is within 2 tiles from the edge of the world
+        if( !InRange(x-2, x+2, y-2, y+2))
+        {
+            if(x-2 < -width / 2) {
+                map.SetTile(new Vector3Int(x-1, y, 1), tile);
+                return;
+            }
+            if (x + 2 > width / 2)
+            {
+                map.SetTile(new Vector3Int(x + 1, y, 1), tile);
+                return;
+            }
+            if (y - 2 < -height / 2)
+            {
+                map.SetTile(new Vector3Int(x, y - 1, 1), tile);
+                return;
+            }
+            if (y + 2 > -height / 2)
+            {
+                map.SetTile(new Vector3Int(x, y + 1, 1), tile);
+                return;
+            }
+        }
+
         int rnd = ChooseDirection(Direction);
 
         switch (rnd)
@@ -218,6 +243,13 @@ public class MapGeneration : MonoBehaviour {
                 }
                 break;
         }
+    }
+
+    bool InRange(int xMin, int xMax, int yMin, int yMax)
+    {
+        if (xMin < -width / 2 || xMax > width / 2) { return false; }
+        if (yMin < -height / 2 || yMax > height / 2) { return false; }
+        return true;
     }
 
     int ChooseDirection(int direction)

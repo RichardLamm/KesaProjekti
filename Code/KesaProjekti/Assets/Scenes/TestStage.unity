@@ -488,7 +488,7 @@ MonoBehaviour:
   groundTrigger: 0.005
   grassTrigger: 0.025
   offset: 1000
-  randomLength: 150
+  randomLength: 300
 --- !u!1 &1663373097
 GameObject:
   m_ObjectHideFlags: 0
