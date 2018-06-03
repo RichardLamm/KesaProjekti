@@ -7,6 +7,7 @@ using UnityEngine.Tilemaps;
 public class MapGeneration : MonoBehaviour {
 
     public Tilemap map;
+    public Tilemap nodes;
     public Tile grass;
     public Tile ground;
     public Tile water;
@@ -30,7 +31,6 @@ public class MapGeneration : MonoBehaviour {
         //    GenerateMap(Random.Range(5, 15), tempX, tempY, grass, true);
         //}
         int initialDirection = Random.Range(0, 8);
-        Debug.Log(initialDirection);
         GenerateRandomLine(randomLength, initialDirection, 0, 0, water);
     }
 	
@@ -58,9 +58,9 @@ public class MapGeneration : MonoBehaviour {
             {
                 if (map.GetTile(new Vector3Int(x, y + north, 0)) != tile && y + north < height/2)
                 {
-                    if (onExisting && map.GetTile(new Vector3Int(x, y + north, 0)) == null){ break; }
+                    if (onExisting && map.GetTile(new Vector3Int(x, y + north, 9)) == null){ break; }
                     TilesAdded = true;
-                    map.SetTile(new Vector3Int(x, y + north, 0), tile);
+                    map.SetTile(new Vector3Int(x, y + north, 9), tile);
                 }
                 else { break; }
             }
@@ -69,11 +69,11 @@ public class MapGeneration : MonoBehaviour {
         {
             for (int west = 1; west < length + Random.Range(0, 2); west++)
             {
-                if (map.GetTile(new Vector3Int(x - west, y, 0)) != tile && x - west > -width/2)
+                if (map.GetTile(new Vector3Int(x - west, y, 9)) != tile && x - west > -width/2)
                 {
-                    if (onExisting && map.GetTile(new Vector3Int(x - west, y, 0)) == null) { break; }
+                    if (onExisting && map.GetTile(new Vector3Int(x - west, y, 9)) == null) { break; }
                     TilesAdded = true;
-                    map.SetTile(new Vector3Int(x - west, y, 0), tile);
+                    map.SetTile(new Vector3Int(x - west, y, 9), tile);
                 }
                 else { break; }
             }
@@ -82,11 +82,11 @@ public class MapGeneration : MonoBehaviour {
         {
             for (int south = 1; south < length + Random.Range(0, 2); south++)
             {
-                if (map.GetTile(new Vector3Int(x, y - south, 0)) != tile && y - south > -height/2)
+                if (map.GetTile(new Vector3Int(x, y - south, 9)) != tile && y - south > -height/2)
                 {
-                    if (onExisting && map.GetTile(new Vector3Int(x, y - south, 0)) == null) { break; }
+                    if (onExisting && map.GetTile(new Vector3Int(x, y - south, 9)) == null) { break; }
                     TilesAdded = true;
-                    map.SetTile(new Vector3Int(x, y - south, 0), tile);
+                    map.SetTile(new Vector3Int(x, y - south, 9), tile);
                 }
                 else { break; }
             }
@@ -95,11 +95,11 @@ public class MapGeneration : MonoBehaviour {
         {
             for (int east = 1; east < length + Random.Range(0, 2); east++)
             {
-                if (map.GetTile(new Vector3Int(x + east, y, 0)) != tile && x - east < width/2)
+                if (map.GetTile(new Vector3Int(x + east, y, 9)) != tile && x - east < width/2)
                 {
-                    if (onExisting && map.GetTile(new Vector3Int(x + east, y, 0)) == null) { break; }
+                    if (onExisting && map.GetTile(new Vector3Int(x + east, y, 9)) == null) { break; }
                     TilesAdded = true;
-                    map.SetTile(new Vector3Int(x + east, y, 0), tile);
+                    map.SetTile(new Vector3Int(x + east, y, 9), tile);
                 }
                 else { break; }
             }
@@ -121,7 +121,7 @@ public class MapGeneration : MonoBehaviour {
             for (int j = 0; j < height; j++)
             {
                 float depth = CalculateDepth(i, j);
-                if (depth > groundTrigger) { map.SetTile(new Vector3Int(i - width / 2, j - height / 2, 0), ground); }
+                if (depth > groundTrigger && depth <= grassTrigger) { map.SetTile(new Vector3Int(i - width / 2, j - height / 2, 0), ground); }
                 if (depth > grassTrigger) { map.SetTile(new Vector3Int(i - width / 2, j - height / 2, 0), grass); }
             }
         }
@@ -153,9 +153,9 @@ public class MapGeneration : MonoBehaviour {
         }
 
         //The tile in the coordinates is checked, if it doesn't contain the same tile, a new tile is created and the length is reduced
-        if ((map.GetTile(new Vector3Int(x, y, 1)) != tile))
+        if ((nodes.GetTile(new Vector3Int(x, y, 1)) != tile))
         {
-            map.SetTile(new Vector3Int(x, y, 1), tile);
+            nodes.SetTile(new Vector3Int(x, y, 1), tile);
             length--;
         }
 
@@ -163,22 +163,22 @@ public class MapGeneration : MonoBehaviour {
         if( !InRange(x-2, x+2, y-2, y+2))
         {
             if(x-2 < -width / 2) {
-                map.SetTile(new Vector3Int(x-1, y, 1), tile);
+                nodes.SetTile(new Vector3Int(x-1, y, 1), tile);
                 return;
             }
             if (x + 2 > width / 2)
             {
-                map.SetTile(new Vector3Int(x + 1, y, 1), tile);
+                nodes.SetTile(new Vector3Int(x + 1, y, 1), tile);
                 return;
             }
             if (y - 2 < -height / 2)
             {
-                map.SetTile(new Vector3Int(x, y - 1, 1), tile);
+                nodes.SetTile(new Vector3Int(x, y - 1, 1), tile);
                 return;
             }
             if (y + 2 > -height / 2)
             {
-                map.SetTile(new Vector3Int(x, y + 1, 1), tile);
+                nodes.SetTile(new Vector3Int(x, y + 1, 1), tile);
                 return;
             }
         }
@@ -192,48 +192,48 @@ public class MapGeneration : MonoBehaviour {
             //The first if checks that the next tile and the tiles adjacent to it are free. If they aren't, the function is called again with same parameters.
             //Otherwise if the next tile (and its adjacent tiles) are free, the function is called with this new position
             case 0:
-                if (map.GetTile(new Vector3Int(x, y + 1, 1)) == tile || map.GetTile(new Vector3Int(x + 1, y + 1, 1)) == tile ||
-                    map.GetTile(new Vector3Int(x - 1, y + 1, 1)) == tile || map.GetTile(new Vector3Int(x, y + 2, 1)) == tile)
+                if (nodes.GetTile(new Vector3Int(x, y + 1, 1)) == tile || nodes.GetTile(new Vector3Int(x + 1, y + 1, 1)) == tile ||
+                    nodes.GetTile(new Vector3Int(x - 1, y + 1, 1)) == tile || nodes.GetTile(new Vector3Int(x, y + 2, 1)) == tile)
                 {
                     GenerateRandomLine(length, Direction, x, y, tile);
                 }
-                else if (map.GetTile(new Vector3Int(x, y + 1, 1)) != tile)
+                else if (nodes.GetTile(new Vector3Int(x, y + 1, 1)) != tile)
                 {
                     GenerateRandomLine(length, Direction, x, y + 1, tile);
                 }
                 break;
             case 1:
 
-                if (map.GetTile(new Vector3Int(x + 1, y, 1)) == tile || map.GetTile(new Vector3Int(x + 1, y - 1, 1)) == tile ||
-                    map.GetTile(new Vector3Int(x + 1, y + 1, 1)) == tile || map.GetTile(new Vector3Int(x + 2, y, 1)) == tile)
+                if (nodes.GetTile(new Vector3Int(x + 1, y, 1)) == tile || nodes.GetTile(new Vector3Int(x + 1, y - 1, 1)) == tile ||
+                    nodes.GetTile(new Vector3Int(x + 1, y + 1, 1)) == tile || nodes.GetTile(new Vector3Int(x + 2, y, 1)) == tile)
                 {
                     GenerateRandomLine(length, Direction, x, y, tile);
                 }
-                else if (map.GetTile(new Vector3Int(x + 1, y, 1)) != tile)
+                else if (nodes.GetTile(new Vector3Int(x + 1, y, 1)) != tile)
                 {
                     GenerateRandomLine(length, Direction, x + 1, y, tile);
                 }
                 break;
 
             case 2:
-                if (map.GetTile(new Vector3Int(x, y - 1, 1)) == tile || map.GetTile(new Vector3Int(x + 1, y - 1, 1)) == tile ||
-                    map.GetTile(new Vector3Int(x - 1, y - 1, 1)) == tile || map.GetTile(new Vector3Int(x, y - 2, 1)) == tile)
+                if (nodes.GetTile(new Vector3Int(x, y - 1, 1)) == tile || nodes.GetTile(new Vector3Int(x + 1, y - 1, 1)) == tile ||
+                    nodes.GetTile(new Vector3Int(x - 1, y - 1, 1)) == tile || nodes.GetTile(new Vector3Int(x, y - 2, 1)) == tile)
                 {
                     GenerateRandomLine(length, Direction, x, y, tile);
                 }
-                else if (map.GetTile(new Vector3Int(x, y - 1, 1)) != tile)
+                else if (nodes.GetTile(new Vector3Int(x, y - 1, 1)) != tile)
                 {
                     GenerateRandomLine(length, Direction, x, y - 1, tile);
                 }
                 break;
 
             case 3:
-                if (map.GetTile(new Vector3Int(x - 1, y, 1)) == tile || map.GetTile(new Vector3Int(x - 1, y - 1, 1)) == tile ||
-                    map.GetTile(new Vector3Int(x - 1, y + 1, 1)) == tile || map.GetTile(new Vector3Int(x - 2, y, 1)) == tile)
+                if (nodes.GetTile(new Vector3Int(x - 1, y, 1)) == tile || nodes.GetTile(new Vector3Int(x - 1, y - 1, 1)) == tile ||
+                    nodes.GetTile(new Vector3Int(x - 1, y + 1, 1)) == tile || nodes.GetTile(new Vector3Int(x - 2, y, 1)) == tile)
                 {
                     GenerateRandomLine(length, Direction, x, y, tile);
                 }
-                else if (map.GetTile(new Vector3Int(x - 1, y, 1)) != tile)
+                else if (nodes.GetTile(new Vector3Int(x - 1, y, 1)) != tile)
                 {
                     GenerateRandomLine(length, Direction, x - 1, y, tile);
                 }
@@ -289,7 +289,6 @@ public class MapGeneration : MonoBehaviour {
         }
         if(Mathf.Abs(direction - rnd*2) > 2 && (direction + rnd * 2) % 7 > 2) {
             rnd = Mathf.Abs(direction + (Random.Range(-3, 2))) % 4;
-            Debug.Log(" -> " + rnd);
         }
        
         return rnd;

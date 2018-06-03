@@ -5,12 +5,12 @@ using UnityEngine;
 [RequireComponent(typeof(SpriteRenderer))]
 public class CreateTexture : MonoBehaviour
 {
-    public int textureWidth = 256;
-    public int textureHeight = 256;
+    public int textureWidth = 128;
+    public int textureHeight = 128;
     public int mapWidth = 640;
     public int mapHeight = 480;
     public int tileSize = 128;
-    public float scale = 50f;
+    public float scale = 150f;
     public float animationSpeed = 1f;
     private float offset;
     SpriteRenderer render;
