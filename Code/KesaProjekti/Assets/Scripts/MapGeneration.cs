@@ -29,15 +29,11 @@ public class MapGeneration : MonoBehaviour {
         //    int tempY = Random.Range(-height/2, height/2);
         //    GenerateMap(Random.Range(5, 15), tempX, tempY, grass, true);
         //}
-
-        GenerateRandomLine(randomLength, Random.Range(1, 9), 0, 0, water);
+        int initialDirection = Random.Range(0, 8);
+        Debug.Log(initialDirection);
+        GenerateRandomLine(randomLength, initialDirection, 0, 0, water);
     }
 	
-	// Update is called once per frame
-	void Update () {
-
-    }
-
     void GenerateMap(int length, int x, int y, Tile tile, bool onExisting = false)
     {
         if (Random.Range(1, 10) > 5) { length -= 1; }
@@ -125,7 +121,6 @@ public class MapGeneration : MonoBehaviour {
             for (int j = 0; j < height; j++)
             {
                 float depth = CalculateDepth(i, j);
-                //if (depth <= groundTrigger) { map.SetTile(new Vector3Int(i - width / 2, j - height / 2, 0), water); }
                 if (depth > groundTrigger) { map.SetTile(new Vector3Int(i - width / 2, j - height / 2, 0), ground); }
                 if (depth > grassTrigger) { map.SetTile(new Vector3Int(i - width / 2, j - height / 2, 0), grass); }
             }
@@ -263,35 +258,40 @@ public class MapGeneration : MonoBehaviour {
         int rnd = Random.Range(0, 6);
         switch (direction)
         {
-            case 1:
+            case 0:
                 if (rnd > 3) { rnd = 0; }
                 break;
-            case 2:
+            case 1:
                 if (rnd == 4) { rnd = 0; }
                 else if (rnd == 5) { rnd = 1; }
                 break;
-            case 3:
+            case 2:
                 if (rnd > 3) { rnd = 1; }
                 break;
-            case 4:
+            case 3:
                 if (rnd == 4) { rnd = 1; }
                 else if (rnd == 5) { rnd = 2; }
                 break;
-            case 5:
+            case 4:
                 if (rnd > 3) { rnd = 2; }
                 break;
-            case 6:
+            case 5:
                 if (rnd == 4) { rnd = 2; }
                 else if (rnd == 5) { rnd = 3; }
                 break;
-            case 7:
+            case 6:
                 if (rnd > 3) { rnd = 3; }
                 break;
-            case 8:
+            case 7:
                 if (rnd == 4) { rnd = 3; }
                 else if (rnd == 5) { rnd = 0; }
                 break;
         }
+        if(Mathf.Abs(direction - rnd*2) > 2 && (direction + rnd * 2) % 7 > 2) {
+            rnd = Mathf.Abs(direction + (Random.Range(-3, 2))) % 4;
+            Debug.Log(" -> " + rnd);
+        }
+       
         return rnd;
     }
 }
