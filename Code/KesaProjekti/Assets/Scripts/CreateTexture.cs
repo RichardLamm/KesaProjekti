@@ -54,8 +54,8 @@ public class CreateTexture : MonoBehaviour
         float xCoord = (float)x / textureWidth * scale + offset;
         float yCoord = (float)y / textureHeight * scale + offset;
 
-        float value = Mathf.PerlinNoise(xCoord, yCoord) - 0.25f;
-        if (value < 0) { value = 0.1f; }
+        float value = Mathf.PerlinNoise(xCoord, yCoord) - 0.35f;
+        if (value < 0) { value = 0f; }
         return new Color(value, value, 1);
     }
 }

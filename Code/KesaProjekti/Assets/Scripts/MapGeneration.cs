@@ -16,24 +16,56 @@ public class MapGeneration : MonoBehaviour {
     public float scale = 5f;
     public float groundTrigger = 0.1f;
     public float grassTrigger = 0.3f;
+    public int numberOfRivers = 3;
     public int offset = 0;
-    private enum direction {none, north, northeast, east, southeast, south, southwest, west, northwest};
+    //private enum direction {none, north, northeast, east, southeast, south, southwest, west, northwest};
     public int randomLength = 30;
+    public int centerRadius = 10;
+    private int lastDirection = -1;
 
 	// Use this for initialization
 	void Start () {
         offset = (int)Random.Range(0f, 10f) * width;
         GenerateIsland();
-        //for (int i = 0; i < Random.Range(7, 15); i++)
-        //{
-        //    int tempX = Random.Range(-width/2, width/2);
-        //    int tempY = Random.Range(-height/2, height/2);
-        //    GenerateMap(Random.Range(5, 15), tempX, tempY, grass, true);
-        //}
-        int initialDirection = Random.Range(0, 8);
-        GenerateRandomLine(randomLength, initialDirection, 0, 0, water);
+
+        for (int rivers = 0; rivers < numberOfRivers; rivers++)
+        {
+            Vector3Int randomCoordinates = RandomizeCoordinates(centerRadius);
+            Debug.Log(randomCoordinates.x + ", " + randomCoordinates.y + ", " + randomCoordinates.z);
+            GenerateRiver(randomLength, randomCoordinates.z, randomCoordinates.x, randomCoordinates.y, water);
+            //GenerateRandomLine(randomLength, randomCoordinates.z, RndMinus() * randomCoordinates.x, RndMinus() * randomCoordinates.y, water);
+        }
     }
 	
+    Vector3Int RandomizeCoordinates(int amount)
+    {
+        int x = (int)(amount * Random.Range(0f, 1f));
+        Debug.Log(x);
+        int y = amount - x;
+        x = x * RndMinus();
+        y = y * RndMinus();
+        int direction = 0;
+        if (y >= -centerRadius / 2 && y < centerRadius / 2) { direction = 2; }
+        else if (y < -centerRadius / 2) { direction = 4; }
+        if (x < -centerRadius / 2) {
+            if (direction == 4) { direction += 1; }
+            else if (direction == 0) { direction -= 1; }
+            else { direction = 6; }
+        }
+        else if (x > centerRadius / 2) {
+            if (direction == 4) { direction -= 1; }
+            else if (direction == 0) { direction += 1; }
+        }
+        if (direction < 0) { direction += 8; }
+        return new Vector3Int(x, y, direction);
+    }
+
+    int RndMinus()
+    {
+        if (Random.Range(0, 10) > 4) { return 1; }
+        return -1;
+    }
+
     void GenerateMap(int length, int x, int y, Tile tile, bool onExisting = false)
     {
         if (Random.Range(1, 10) > 5) { length -= 1; }
@@ -142,6 +174,41 @@ public class MapGeneration : MonoBehaviour {
         value = (float)((xDif / 2) * (yDif / 2)) * value;
         //Debug.Log("(" + x + "," + y + ") " + xDif + " _ " + yDif + " _ " + value);
         return value;
+    }
+
+    void GenerateRiver(int length, int direction, int x, int y, Tile tile)
+    {
+        if (nodes.GetTile(new Vector3Int(x, y, 1)) == tile ||
+                (map.GetTile(new Vector3Int(x, y, 0)) == null)) {
+            return;
+        }
+        else { nodes.SetTile(new Vector3Int(x, y, 1), tile); }
+        for (int i = 0; i < length; i++)
+        {
+            int rnd = ChooseDirection(direction);
+            switch (rnd)
+            {
+                case 0: //up
+                    y++;
+                    break;
+                case 1: //right
+                    x++;
+                    break;
+                case 2: //down
+                    y--;
+                    break;
+                case 3: //left
+                    x--;
+                    break;
+            }
+            if (nodes.GetTile(new Vector3Int(x, y, 1)) == tile ||
+                map.GetTile(new Vector3Int(x, y, 0)) == null)
+            {
+                lastDirection = -1;
+                return;
+            }
+            else { nodes.SetTile(new Vector3Int(x, y, 1), tile); }
+        }
     }
 
     //A function that generates a randomized line
@@ -255,43 +322,94 @@ public class MapGeneration : MonoBehaviour {
         //2, 4, 6 and 8 are intercardinal directions (NE, SE, SW, NW)
         //At the start a random number is generated between 0 and 5. 1-3 correspond to the cardinal directions, 
         //while 4-5 are converted into cardinal directions according to the main direction
-        int rnd = Random.Range(0, 6);
+        //int rnd = Random.Range(0, 6);
+        //switch (direction)
+        //{
+        //    case 0:
+        //        if (rnd > 3) { rnd = 0; }
+        //        break;
+        //    case 1:
+        //        if (rnd == 4) { rnd = 0; }
+        //        else if (rnd == 5) { rnd = 1; }
+        //        break;
+        //    case 2:
+        //        if (rnd > 3) { rnd = 1; }
+        //        break;
+        //    case 3:
+        //        if (rnd == 4) { rnd = 1; }
+        //        else if (rnd == 5) { rnd = 2; }
+        //        break;
+        //    case 4:
+        //        if (rnd > 3) { rnd = 2; }
+        //        break;
+        //    case 5:
+        //        if (rnd == 4) { rnd = 2; }
+        //        else if (rnd == 5) { rnd = 3; }
+        //        break;
+        //    case 6:
+        //        if (rnd > 3) { rnd = 3; }
+        //        break;
+        //    case 7:
+        //        if (rnd == 4) { rnd = 3; }
+        //        else if (rnd == 5) { rnd = 0; }
+        //        break;
+        //}
+        //if(Mathf.Abs(direction - rnd*2) > 2 && (direction + rnd * 2) % 7 > 2) {
+        //    rnd = Mathf.Abs(direction + (Random.Range(-2, 1))) / 2;
+        //}
+
+        int maxValue = 8;
+        int rnd = Random.Range(0, maxValue);
+        int lowBound = 4;
+        int highBound = 6;
         switch (direction)
         {
             case 0:
-                if (rnd > 3) { rnd = 0; }
+                direction = 0;
+                if (rnd >= lowBound && rnd < highBound) { direction++; }
+                else if(rnd >= highBound) { direction--; }
                 break;
             case 1:
-                if (rnd == 4) { rnd = 0; }
-                else if (rnd == 5) { rnd = 1; }
+                if (rnd < maxValue / 2) { direction = 0; }
+                else if (rnd >= maxValue / 2) { direction = 1; }
                 break;
             case 2:
-                if (rnd > 3) { rnd = 1; }
+                direction = 1;
+                if (rnd >= lowBound && rnd < highBound) { direction++; }
+                else if (rnd >= highBound) { direction--; }
                 break;
             case 3:
-                if (rnd == 4) { rnd = 1; }
-                else if (rnd == 5) { rnd = 2; }
+                if (rnd < maxValue / 2) { direction = 1; }
+                else if (rnd >= maxValue / 2) { direction = 2; }
                 break;
             case 4:
-                if (rnd > 3) { rnd = 2; }
+                direction = 2;
+                if (rnd >= lowBound && rnd < highBound) { direction++; }
+                else if (rnd >= highBound) { direction--; }
                 break;
             case 5:
-                if (rnd == 4) { rnd = 2; }
-                else if (rnd == 5) { rnd = 3; }
+                if (rnd < maxValue / 2) { direction = 2; }
+                else if (rnd >= maxValue / 2) { direction = 3; }
                 break;
             case 6:
-                if (rnd > 3) { rnd = 3; }
+                direction = 3;
+                if (rnd >= lowBound && rnd < highBound) { direction++; }
+                else if (rnd >= highBound) { direction--; }
                 break;
             case 7:
-                if (rnd == 4) { rnd = 3; }
-                else if (rnd == 5) { rnd = 0; }
+                if (rnd < maxValue / 2) { direction = 3; }
+                else if (rnd >= maxValue / 2) { direction = 0; }
                 break;
         }
-        if(Mathf.Abs(direction - rnd*2) > 2 && (direction + rnd * 2) % 7 > 2) {
-            rnd = Mathf.Abs(direction + (Random.Range(-3, 2))) % 4;
+        if(direction < 0) { direction += 4; }
+        direction = direction % 4;
+        if (lastDirection != -1)
+        {
+            if (lastDirection < 2) { if (direction == lastDirection + 2) { direction = lastDirection; } }
+            else if (lastDirection - 2 == direction) { direction = lastDirection; }
         }
-       
-        return rnd;
+        lastDirection = direction;
+        return direction;
     }
 }
 
