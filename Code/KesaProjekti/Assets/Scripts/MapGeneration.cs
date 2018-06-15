@@ -28,13 +28,14 @@ public class MapGeneration : MonoBehaviour {
         offset = (int)Random.Range(0f, 10f) * width;
         GenerateIsland();
 
-        for (int rivers = 0; rivers < numberOfRivers; rivers++)
-        {
-            Vector3Int randomCoordinates = RandomizeCoordinates(centerRadius);
-            Debug.Log(randomCoordinates.x + ", " + randomCoordinates.y + ", " + randomCoordinates.z);
-            GenerateRiver(randomLength, randomCoordinates.z, randomCoordinates.x, randomCoordinates.y, water);
-            //GenerateRandomLine(randomLength, randomCoordinates.z, RndMinus() * randomCoordinates.x, RndMinus() * randomCoordinates.y, water);
-        }
+        //for (int rivers = 0; rivers < numberOfRivers; rivers++)
+        //{
+        //    Vector3Int randomCoordinates = RandomizeCoordinates(centerRadius);
+        //    Debug.Log(randomCoordinates.x + ", " + randomCoordinates.y + ", " + randomCoordinates.z);
+        //    GenerateRiver(randomLength, randomCoordinates.z, randomCoordinates.x, randomCoordinates.y, water);
+        //    //GenerateRandomLine(randomLength, randomCoordinates.z, RndMinus() * randomCoordinates.x, RndMinus() * randomCoordinates.y, water);
+        //}
+        GenerateArea(5, 10, 10, water);
     }
 	
     Vector3Int RandomizeCoordinates(int amount)
@@ -66,11 +67,12 @@ public class MapGeneration : MonoBehaviour {
         return -1;
     }
 
-    void GenerateMap(int length, int x, int y, Tile tile, bool onExisting = false)
+    void GenerateArea(int length, int x, int y, Tile tile, bool onExisting = false)
     {
         if (Random.Range(1, 10) > 5) { length -= 1; }
         length -= 1;
         if (length <= 0) { return; }
+        if (Random.Range(1, 10) == 7) { length += 4; }
 
         // Create tile on current position
         if (!onExisting && map.GetTile(new Vector3Int(x, y, 0)) != tile)
@@ -139,10 +141,10 @@ public class MapGeneration : MonoBehaviour {
 
         if (TilesAdded)
         {
-            if (y < height/2) { GenerateMap(length, x, y - 1, tile, onExisting); }
-            if (y > -height/2) { GenerateMap(length, x, y + 1, tile, onExisting); }
-            if (x < width/2) { GenerateMap(length, x - 1, y, tile, onExisting); }
-            if (x < -width/2) { GenerateMap(length, x + 1, y, tile, onExisting); }
+            if (y < height/2) { GenerateArea(length, x, y - 1, tile, onExisting); }
+            if (y > -height/2) { GenerateArea(length, x, y + 1, tile, onExisting); }
+            if (x < width/2) { GenerateArea(length, x - 1, y, tile, onExisting); }
+            if (x < -width/2) { GenerateArea(length, x + 1, y, tile, onExisting); }
         }
     }
 
