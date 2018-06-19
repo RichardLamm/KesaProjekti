@@ -11,6 +11,7 @@ public class MapGeneration : MonoBehaviour {
     public Tile grass;
     public Tile ground;
     public Tile water;
+    public Tile tree;
     public int width = 640;
     public int height = 480;
     public float scale = 5f;
@@ -23,25 +24,46 @@ public class MapGeneration : MonoBehaviour {
     public int centerRadius = 10;
     private int lastDirection = -1;
 
+    private struct TileRules
+    {
+        private Tile self;
+        private List<Tile> limitations;
+        public TileRules(Tile self_, List<Tile> limitations_){
+            self = self_;
+            limitations = limitations_;
+        }
+        // Returns true if tested tile can be added, false otherwise
+        public bool CheckLimitations(Tile test)
+        {
+            if(test == null) { return true; }
+            if(test == self) { return false; }
+            if (limitations.Contains(test)) { return false; }
+            return true;
+        }
+        public Tile GetSelf()
+        {
+            return self;
+        }
+    }
+
 	// Use this for initialization
 	void Start () {
         offset = (int)Random.Range(0f, 10f) * width;
         GenerateIsland();
 
-        //for (int rivers = 0; rivers < numberOfRivers; rivers++)
-        //{
-        //    Vector3Int randomCoordinates = RandomizeCoordinates(centerRadius);
-        //    Debug.Log(randomCoordinates.x + ", " + randomCoordinates.y + ", " + randomCoordinates.z);
-        //    GenerateRiver(randomLength, randomCoordinates.z, randomCoordinates.x, randomCoordinates.y, water);
-        //    //GenerateRandomLine(randomLength, randomCoordinates.z, RndMinus() * randomCoordinates.x, RndMinus() * randomCoordinates.y, water);
-        //}
-        GenerateArea(5, 10, 10, water);
+        for (int rivers = 0; rivers < numberOfRivers; rivers++)
+        {
+            Vector3Int randomCoordinates = RandomizeCoordinates(centerRadius);
+            GenerateRiver(randomLength, randomCoordinates.z, randomCoordinates.x, randomCoordinates.y, water);
+            //GenerateRandomLine(randomLength, randomCoordinates.z, RndMinus() * randomCoordinates.x, RndMinus() * randomCoordinates.y, water);
+        }
+        TileRules treeRule = new TileRules(tree, new List<Tile> { water });
+        GenerateArea(7, 10, 10, treeRule, true);
     }
 	
     Vector3Int RandomizeCoordinates(int amount)
     {
         int x = (int)(amount * Random.Range(0f, 1f));
-        Debug.Log(x);
         int y = amount - x;
         x = x * RndMinus();
         y = y * RndMinus();
@@ -67,34 +89,49 @@ public class MapGeneration : MonoBehaviour {
         return -1;
     }
 
-    void GenerateArea(int length, int x, int y, Tile tile, bool onExisting = false)
+    bool CheckTilesAt(int x, int y, Tilemap map, TileRules tester)
+    {
+        for(int z = -10; z <= 10; z++)
+        {
+            if(map.GetTile(new Vector3Int(x,y,z)) != null)
+            {
+                if (!tester.CheckLimitations((Tile)map.GetTile(new Vector3Int(x, y, z)))){ return false; }
+            }
+        }
+        return true;
+
+    }
+
+    void GenerateArea(int length, int x, int y, TileRules tile, bool onExisting = false)
     {
         if (Random.Range(1, 10) > 5) { length -= 1; }
         length -= 1;
         if (length <= 0) { return; }
-        if (Random.Range(1, 10) == 7) { length += 4; }
+        if (Random.Range(1, 10) == 7) { length += 3; }
 
         // Create tile on current position
-        if (!onExisting && map.GetTile(new Vector3Int(x, y, 0)) != tile)
+        if(onExisting && map.GetTile(new Vector3Int(x, y, 0)) != null)
         {
-            map.SetTile(new Vector3Int(x, y, 0), tile);
+            if (CheckTilesAt(x, y, nodes, tile))
+            {
+                nodes.SetTile(new Vector3Int(x, y, 0), tile.GetSelf());
+            }
         }
-        else if(onExisting && map.GetTile(new Vector3Int(x, y, 0)) != null)
+        else if (!onExisting && CheckTilesAt(x, y, nodes, tile))
         {
-            map.SetTile(new Vector3Int(x, y, 0), tile);
+            nodes.SetTile(new Vector3Int(x, y, 0), tile.GetSelf());
         }
 
         bool TilesAdded = false;
-
         if (y < height/2)   // north
         {
             for (int north = 1; north < length + Random.Range(0,2); north++)
             {
-                if (map.GetTile(new Vector3Int(x, y + north, 0)) != tile && y + north < height/2)
+                if (CheckTilesAt(x, y + north, nodes, tile) && y + north < height/2)
                 {
-                    if (onExisting && map.GetTile(new Vector3Int(x, y + north, 9)) == null){ break; }
+                    if ((onExisting && map.GetTile(new Vector3Int(x, y + north, 0)) == null)){ break; }
                     TilesAdded = true;
-                    map.SetTile(new Vector3Int(x, y + north, 9), tile);
+                    nodes.SetTile(new Vector3Int(x, y + north, 0), tile.GetSelf());
                 }
                 else { break; }
             }
@@ -103,11 +140,11 @@ public class MapGeneration : MonoBehaviour {
         {
             for (int west = 1; west < length + Random.Range(0, 2); west++)
             {
-                if (map.GetTile(new Vector3Int(x - west, y, 9)) != tile && x - west > -width/2)
+                if (CheckTilesAt(x - west, y, nodes, tile) && x - west > -width/2)
                 {
-                    if (onExisting && map.GetTile(new Vector3Int(x - west, y, 9)) == null) { break; }
+                    if (onExisting && map.GetTile(new Vector3Int(x - west, y, 0)) == null) { break; }
                     TilesAdded = true;
-                    map.SetTile(new Vector3Int(x - west, y, 9), tile);
+                    nodes.SetTile(new Vector3Int(x - west, y, 0), tile.GetSelf());
                 }
                 else { break; }
             }
@@ -116,11 +153,11 @@ public class MapGeneration : MonoBehaviour {
         {
             for (int south = 1; south < length + Random.Range(0, 2); south++)
             {
-                if (map.GetTile(new Vector3Int(x, y - south, 9)) != tile && y - south > -height/2)
+                if (CheckTilesAt(x, y - south, nodes, tile) && y - south > -height/2)
                 {
-                    if (onExisting && map.GetTile(new Vector3Int(x, y - south, 9)) == null) { break; }
+                    if (onExisting && map.GetTile(new Vector3Int(x, y - south, 0)) == null) { break; }
                     TilesAdded = true;
-                    map.SetTile(new Vector3Int(x, y - south, 9), tile);
+                    nodes.SetTile(new Vector3Int(x, y - south, 0), tile.GetSelf());
                 }
                 else { break; }
             }
@@ -129,11 +166,11 @@ public class MapGeneration : MonoBehaviour {
         {
             for (int east = 1; east < length + Random.Range(0, 2); east++)
             {
-                if (map.GetTile(new Vector3Int(x + east, y, 9)) != tile && x - east < width/2)
+                if (CheckTilesAt(x + east, y, nodes, tile) && x + east < width/2)
                 {
-                    if (onExisting && map.GetTile(new Vector3Int(x + east, y, 9)) == null) { break; }
+                    if (onExisting && map.GetTile(new Vector3Int(x + east, y, 0)) == null) { break; }
                     TilesAdded = true;
-                    map.SetTile(new Vector3Int(x + east, y, 9), tile);
+                    nodes.SetTile(new Vector3Int(x + east, y, 0), tile.GetSelf());
                 }
                 else { break; }
             }
@@ -141,11 +178,12 @@ public class MapGeneration : MonoBehaviour {
 
         if (TilesAdded)
         {
-            if (y < height/2) { GenerateArea(length, x, y - 1, tile, onExisting); }
-            if (y > -height/2) { GenerateArea(length, x, y + 1, tile, onExisting); }
-            if (x < width/2) { GenerateArea(length, x - 1, y, tile, onExisting); }
-            if (x < -width/2) { GenerateArea(length, x + 1, y, tile, onExisting); }
+            if (y + 1 < height/2) { GenerateArea(length, x, y + 1, tile, onExisting); }
+            if (y - 1 > -height/2) { GenerateArea(length, x, y - 1, tile, onExisting); }
+            if (x + 1 < width/2) { GenerateArea(length, x + 1, y, tile, onExisting); }
+            if (x - 1 > -width/2) { GenerateArea(length, x - 1, y, tile, onExisting); }
         }
+        return;
     }
 
     void GenerateIsland()
@@ -174,7 +212,6 @@ public class MapGeneration : MonoBehaviour {
         xDif = xDif / (width / 2);
         yDif = yDif / (height / 2);
         value = (float)((xDif / 2) * (yDif / 2)) * value;
-        //Debug.Log("(" + x + "," + y + ") " + xDif + " _ " + yDif + " _ " + value);
         return value;
     }
 

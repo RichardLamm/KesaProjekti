@@ -714,6 +714,7 @@ MonoBehaviour:
   grass: {fileID: 11400000, guid: aa41530d956895c48a58bfb59139e069, type: 2}
   ground: {fileID: 11400000, guid: 1e742c1d47fc9374fa15f85284f07083, type: 2}
   water: {fileID: 11400000, guid: 89986f30332fc7549ae1f539bbd48c33, type: 2}
+  tree: {fileID: 11400000, guid: 3e76e3c6c1554be48afadeb40245f0f3, type: 2}
   width: 200
   height: 100
   scale: 5
