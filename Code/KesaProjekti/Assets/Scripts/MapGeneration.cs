@@ -12,6 +12,8 @@ public class MapGeneration : MonoBehaviour {
     public Tile ground;
     public Tile water;
     public Tile tree;
+    public Tile rock;
+    public Tile snowyRock;
     public int width = 640;
     public int height = 480;
     public float scale = 5f;
@@ -50,7 +52,7 @@ public class MapGeneration : MonoBehaviour {
 	void Start () {
         offset = (int)Random.Range(0f, 10f) * width;
         GenerateIsland();
-
+        GenerateMountain(0.0015f, 0.0005f, 4);
         for (int rivers = 0; rivers < numberOfRivers; rivers++)
         {
             Vector3Int randomCoordinates = RandomizeCoordinates(centerRadius);
@@ -186,6 +188,19 @@ public class MapGeneration : MonoBehaviour {
         return;
     }
 
+    void GenerateMountain(float topTrigger, float midTrigger, int multiplier)
+    {
+        for (int i = 0; i < width; i++)
+        {
+            for (int j = 0; j < height; j++)
+            {
+                float depth = CalculateDepth(i, j, multiplier);
+                if (depth > midTrigger && depth <= topTrigger) { map.SetTile(new Vector3Int(i - width / 2, j - height / 2, -1), rock); }
+                if (depth > topTrigger) { map.SetTile(new Vector3Int(i - width / 2, j - height / 2, -1), snowyRock); }
+            }
+        }
+    }
+
     void GenerateIsland()
     {
         for (int i = 0; i < width; i++)
@@ -199,7 +214,7 @@ public class MapGeneration : MonoBehaviour {
         }
     }
 
-    float CalculateDepth(int x, int y)
+    float CalculateDepth(int x, int y, int multiplier = 1)
     {
         float xCoord = (float)x / width * scale + offset;
         float yCoord = (float)y / height * scale + offset;
@@ -211,7 +226,10 @@ public class MapGeneration : MonoBehaviour {
         else { yDif = y % (height / 2); }
         xDif = xDif / (width / 2);
         yDif = yDif / (height / 2);
-        value = (float)((xDif / 2) * (yDif / 2)) * value;
+        for (int i = 0; i < multiplier; i++)
+        {
+            value = (float)((xDif / 2) * (yDif / 2)) * value;
+        }
         return value;
     }
 
