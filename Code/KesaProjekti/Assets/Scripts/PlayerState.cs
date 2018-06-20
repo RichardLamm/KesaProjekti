@@ -8,7 +8,8 @@ public class PlayerState : MonoBehaviour {
     {
         Idle,
         Moving,
-        Map
+        Map,
+        Inventory
     };
     public int speed = 10;
     private playerState state = playerState.Idle;
@@ -18,6 +19,8 @@ public class PlayerState : MonoBehaviour {
     public Camera mainCamera;
     public int maxZoom;
     public int minZoom;
+
+    public CanvasGroup inventory;
 
     // Use this for initialization
     void Start () {
@@ -52,6 +55,13 @@ public class PlayerState : MonoBehaviour {
                     state = playerState.Map;
                     mainCamera.orthographicSize = maxZoom;
                 }
+
+                else if (Input.GetButtonDown("Inventory"))
+                {
+                    inventory.alpha = 1f;
+                    inventory.blocksRaycasts = true;
+                    state = playerState.Inventory;
+                }
                 break;
 
             case playerState.Moving: 
@@ -76,6 +86,14 @@ public class PlayerState : MonoBehaviour {
                     state = playerState.Idle;
                     mainCamera.transform.position = transform.position + cameraOffset;
                     mainCamera.orthographicSize = minZoom;
+                }
+                break;
+            case playerState.Inventory:
+                if (Input.GetButtonDown("Inventory"))
+                {
+                    inventory.alpha = 0f;
+                    inventory.blocksRaycasts = false;
+                    state = playerState.Idle;
                 }
                 break;
         }
