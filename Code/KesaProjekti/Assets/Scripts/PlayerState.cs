@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerMove : MonoBehaviour {
+public class PlayerState : MonoBehaviour {
 
     private enum playerState
     {
@@ -15,10 +15,17 @@ public class PlayerMove : MonoBehaviour {
     private float xAxis;
     private float yAxis;
     private Vector3 cameraOffset;
+    public Camera mainCamera;
+    public int maxZoom;
+    public int minZoom;
 
     // Use this for initialization
     void Start () {
-        cameraOffset = Camera.main.transform.position - transform.position;
+        //Setting the camera position
+        Vector3 playerPosition = GetPosition();
+        mainCamera.transform.position = new Vector3(playerPosition.x, playerPosition.y, -10);
+        mainCamera.orthographicSize = minZoom;
+        cameraOffset = mainCamera.transform.position - transform.position;
     }
 
 	
@@ -27,7 +34,10 @@ public class PlayerMove : MonoBehaviour {
         PlayerStateMachine();       
     }
 
-
+    Vector3 GetPosition()
+    {
+        return transform.position;
+    }
     public void PlayerStateMachine()
     {
         switch (state)
@@ -40,7 +50,7 @@ public class PlayerMove : MonoBehaviour {
                 else if (Input.GetButtonDown("Map"))
                 {
                     state = playerState.Map;
-                    Camera.main.orthographicSize = 30;
+                    mainCamera.orthographicSize = maxZoom;
                 }
                 break;
 
@@ -48,7 +58,7 @@ public class PlayerMove : MonoBehaviour {
                 xAxis = Input.GetAxis("Horizontal");
                 yAxis = Input.GetAxis("Vertical");
                 transform.position += new Vector3(xAxis, yAxis, 0) * Time.deltaTime * speed;
-                Camera.main.transform.position = transform.position + cameraOffset;
+                mainCamera.transform.position = transform.position + cameraOffset;
 
                 //TODO: Testaile eri statenvaihtotapoja, nyt ei voi tehdä täyskäännöstä suoraan.
                 if ( xAxis == 0 && yAxis == 0)
@@ -60,12 +70,12 @@ public class PlayerMove : MonoBehaviour {
             case playerState.Map:
                 xAxis = Input.GetAxis("Horizontal");
                 yAxis = Input.GetAxis("Vertical");
-                Camera.main.transform.position += new Vector3(xAxis, yAxis, 0) * Time.deltaTime * 2 * speed;
+                mainCamera.transform.position += new Vector3(xAxis, yAxis, 0) * Time.deltaTime * 2 * speed;
                 if (Input.GetButtonDown("Map"))
                 {
                     state = playerState.Idle;
-                    Camera.main.transform.position = transform.position + cameraOffset;
-                    Camera.main.orthographicSize = 5;
+                    mainCamera.transform.position = transform.position + cameraOffset;
+                    mainCamera.orthographicSize = minZoom;
                 }
                 break;
         }

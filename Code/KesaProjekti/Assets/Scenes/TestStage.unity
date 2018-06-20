@@ -597,6 +597,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 5
+  mainCamera: {fileID: 303106482}
+  maxZoom: 20
+  minZoom: 4
 --- !u!212 &984587643
 SpriteRenderer:
   m_ObjectHideFlags: 0
