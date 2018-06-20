@@ -22,7 +22,7 @@ public class InventoryManagement : MonoBehaviour {
         GameObject test = new GameObject();
         Image NewImage = test.AddComponent<Image>();
         //NewImage.sprite = pick;
-        NewImage.sprite = Resources.Load<Sprite>(itemName);
+        NewImage.sprite = Resources.Load<Sprite>("Items/" + itemName);
         test.GetComponent<RectTransform>().SetParent(inventoryGrid.transform);
         test.SetActive(true);
         test.transform.localScale = new Vector3(1, 1, 0);
