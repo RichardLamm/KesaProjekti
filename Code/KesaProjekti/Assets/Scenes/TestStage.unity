@@ -924,7 +924,7 @@ MonoBehaviour:
   scale: 5
   groundTrigger: 0.005
   grassTrigger: 0.025
-  numberOfRivers: 10
+  numberOfRivers: 5
   offset: 1000
   randomLength: 300
   centerRadius: 15

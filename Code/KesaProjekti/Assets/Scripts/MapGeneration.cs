@@ -195,8 +195,12 @@ public class MapGeneration : MonoBehaviour {
             for (int j = 0; j < height; j++)
             {
                 float depth = CalculateDepth(i, j, multiplier);
-                if (depth > midTrigger && depth <= topTrigger) { map.SetTile(new Vector3Int(i - width / 2, j - height / 2, -1), rock); }
-                if (depth > topTrigger) { map.SetTile(new Vector3Int(i - width / 2, j - height / 2, -1), snowyRock); }
+                if (depth > midTrigger)
+                {
+                    map.SetTile(new Vector3Int(i - width / 2, j - height / 2, 0), null);
+                    if (depth <= topTrigger) { map.SetTile(new Vector3Int(i - width / 2, j - height / 2, 0), rock); }
+                    else if (depth > topTrigger) { map.SetTile(new Vector3Int(i - width / 2, j - height / 2, 0), snowyRock); }
+                }
             }
         }
     }
