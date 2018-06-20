@@ -21,7 +21,9 @@ public class PlayerState : MonoBehaviour {
     public int minZoom;
 
     public CanvasGroup inventory;
+    public InventoryManagement inventoryScript;
 
+    private List<string> items = new List<string> {"axe", "bucket", "pick", "scythe"};
     // Use this for initialization
     void Start () {
         //Setting the camera position
@@ -29,6 +31,7 @@ public class PlayerState : MonoBehaviour {
         mainCamera.transform.position = new Vector3(playerPosition.x, playerPosition.y, -10);
         mainCamera.orthographicSize = minZoom;
         cameraOffset = mainCamera.transform.position - transform.position;
+
     }
 
 	
@@ -60,6 +63,7 @@ public class PlayerState : MonoBehaviour {
                 {
                     inventory.alpha = 1f;
                     inventory.blocksRaycasts = true;
+                    inventoryScript.getItems(items);
                     state = playerState.Inventory;
                 }
                 break;
