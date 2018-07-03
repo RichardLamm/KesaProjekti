@@ -61,8 +61,42 @@ public class MapGeneration : MonoBehaviour {
         }
         TileRules treeRule = new TileRules(tree, new List<Tile> { water });
         GenerateArea(7, 10, 10, treeRule, true);
+        GetSpawnPoints();
     }
 	
+    List<Vector2Int> GetSpawnPoints()
+    {
+        int offset = Random.Range(0, 10000);
+        List<Vector2Int> points = new List<Vector2Int>();
+        for(int x = 1; x < width - 1; x++)
+        {
+            for(int y = 1; y < height - 1; y++)
+            {
+                if(IsPeak(x, y, offset, 50)) {
+                    nodes.SetTile(new Vector3Int(x-width/2, y-height/2, 0), snowyRock);
+                    points.Add(new Vector2Int(x-width/2, y-height/2));
+                }
+            }
+        }
+        return points;
+    }
+
+    bool IsPeak(int x, int y, int offset, float scale)
+    {
+        float xCoord = (float)x / width * scale + offset;
+        float yCoord = (float)y / height * scale + offset;
+        float value = Mathf.PerlinNoise(xCoord, yCoord);
+        if (value <= Mathf.PerlinNoise((float)(x+1) / width * scale + offset, (float)y / height * scale + offset)) { return false; }
+        if (value <= Mathf.PerlinNoise((float)(x+1) / width * scale + offset, (float)(y+1) / height * scale + offset)) { return false; }
+        if (value <= Mathf.PerlinNoise((float)(x+1) / width * scale + offset, (float)(y-1) / height * scale + offset)) { return false; }
+        if (value <= Mathf.PerlinNoise((float)x / width * scale + offset, (float)(y+1) / height * scale + offset)) { return false; }
+        if (value <= Mathf.PerlinNoise((float)x / width * scale + offset, (float)(y-1) / height * scale + offset)) { return false; }
+        if (value <= Mathf.PerlinNoise((float)(x-1) / width * scale + offset, (float)y / height * scale + offset)) { return false; }
+        if (value <= Mathf.PerlinNoise((float)(x-1) / width * scale + offset, (float)(y+1) / height * scale + offset)) { return false; }
+        if (value <= Mathf.PerlinNoise((float)(x-1) / width * scale + offset, (float)(y-1) / height * scale + offset)) { return false; }
+        return true;
+    }
+
     Vector3Int RandomizeCoordinates(int amount)
     {
         int x = (int)(amount * Random.Range(0f, 1f));
