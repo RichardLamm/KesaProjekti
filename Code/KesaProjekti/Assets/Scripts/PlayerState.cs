@@ -23,7 +23,8 @@ public class PlayerState : MonoBehaviour {
     public CanvasGroup inventory;
     public InventoryManagement inventoryScript;
 
-    private List<string> items = new List<string> {"axe", "bucket", "pick", "scythe"};
+    private List<string> tools = new List<string> { "axe", "bucket", "pick", "scythe" };
+    private Dictionary<string, int> items = new Dictionary<string, int>() { { "wood", 100 }, { "gold", 10 } };
     // Use this for initialization
     void Start () {
         //Setting the camera position

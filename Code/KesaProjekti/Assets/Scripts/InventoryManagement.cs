@@ -22,16 +22,17 @@ public class InventoryManagement : MonoBehaviour {
         GameObject test = new GameObject();
         Image NewImage = test.AddComponent<Image>();
         //NewImage.sprite = pick;
-        NewImage.sprite = Resources.Load<Sprite>("Items/" + itemName);
+        NewImage.sprite = Resources.Load<Sprite>("RawResources/" + itemName);
         test.GetComponent<RectTransform>().SetParent(inventoryGrid.transform);
         test.SetActive(true);
         test.transform.localScale = new Vector3(1, 1, 0);
     }
-    public void getItems(List<string> items)
+    public void getItems(Dictionary<string, int> items)
     {
         if (inventoryChanged == false) {
-            for (int i = 0; i < items.Count; i++) {
-                showItems(items[i]);
+            foreach (var item in items)
+            {
+                showItems(item.Key);
             }
             inventoryChanged = true;
         }
