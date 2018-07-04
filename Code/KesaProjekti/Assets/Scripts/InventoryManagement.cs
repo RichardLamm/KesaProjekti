@@ -6,7 +6,10 @@ using UnityEngine.UI;
 public class InventoryManagement : MonoBehaviour {
 
     public GridLayoutGroup inventoryGrid;
-    private bool inventoryChanged = false;
+    public GridLayoutGroup toolBelt;
+
+    private bool inventoryChanged = true;
+    private bool newTools = true;
     // Use this for initialization
     void Start () {
 		
@@ -19,22 +22,40 @@ public class InventoryManagement : MonoBehaviour {
 
     public void showItems(string itemName)
     {
-        GameObject test = new GameObject();
-        Image NewImage = test.AddComponent<Image>();
+        GameObject item = new GameObject();
+        Image NewImage = item.AddComponent<Image>();
         //NewImage.sprite = pick;
         NewImage.sprite = Resources.Load<Sprite>("RawResources/" + itemName);
-        test.GetComponent<RectTransform>().SetParent(inventoryGrid.transform);
-        test.SetActive(true);
-        test.transform.localScale = new Vector3(1, 1, 0);
+        item.GetComponent<RectTransform>().SetParent(inventoryGrid.transform);
+        item.SetActive(true);
+        item.transform.localScale = new Vector3(1, 1, 0);
     }
     public void getItems(Dictionary<string, int> items)
     {
-        if (inventoryChanged == false) {
+        if (inventoryChanged == true) {
             foreach (var item in items)
             {
                 showItems(item.Key);
             }
-            inventoryChanged = true;
+            inventoryChanged = false;
+        }
+    }
+
+    public void getTools(List<string> tools)
+    {
+        if (newTools == true)
+        {
+            foreach (var item in tools)
+            {
+                GameObject tool = new GameObject();
+                Image NewImage = tool.AddComponent<Image>();
+                //NewImage.sprite = pick;
+                NewImage.sprite = Resources.Load<Sprite>("Tools/" + item);
+                tool.GetComponent<RectTransform>().SetParent(toolBelt.transform);
+                tool.SetActive(true);
+                tool.transform.localScale = new Vector3(1, 1, 0);
+            }
+            newTools = false;
         }
     }
 }
