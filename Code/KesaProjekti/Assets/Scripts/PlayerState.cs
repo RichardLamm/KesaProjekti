@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Tilemaps;
 
 public class PlayerState : MonoBehaviour {
 
@@ -19,8 +20,12 @@ public class PlayerState : MonoBehaviour {
     public Camera mainCamera;
     public int maxZoom;
     public int minZoom;
+    public float speedModifier = 1;
+    private float originalSpeedModifier;
+    public float rockMovement;
 
     public CanvasGroup inventory;
+    public Tilemap map;
     public InventoryManagement inventoryScript;
 
     private List<string> tools = new List<string> { "axe", "bucket", "pick", "scythe" };
@@ -32,8 +37,10 @@ public class PlayerState : MonoBehaviour {
         mainCamera.transform.position = new Vector3(playerPosition.x, playerPosition.y, -10);
         mainCamera.orthographicSize = minZoom;
         cameraOffset = mainCamera.transform.position - transform.position;
+        originalSpeedModifier = speedModifier;
 
     }
+
 
 	
 	// Update is called once per frame
@@ -73,7 +80,17 @@ public class PlayerState : MonoBehaviour {
             case playerState.Moving: 
                 xAxis = Input.GetAxis("Horizontal");
                 yAxis = Input.GetAxis("Vertical");
-                transform.position += new Vector3(xAxis, yAxis, 0) * Time.deltaTime * speed;
+
+                Vector3Int gridPosition = map.WorldToCell(transform.position);
+                if(map.GetSprite(gridPosition).name == "rock")
+                {
+                    speedModifier = rockMovement;
+                }
+                else
+                {
+                    speedModifier = originalSpeedModifier;
+                }
+                transform.position += new Vector3(xAxis, yAxis, 0) * Time.deltaTime * speed * speedModifier;
                 mainCamera.transform.position = transform.position + cameraOffset;
 
                 //TODO: Testaile eri statenvaihtotapoja, nyt ei voi tehdä täyskäännöstä suoraan.

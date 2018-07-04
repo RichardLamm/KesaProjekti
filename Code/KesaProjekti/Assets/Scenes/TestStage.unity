@@ -795,7 +795,10 @@ MonoBehaviour:
   mainCamera: {fileID: 303106482}
   maxZoom: 30
   minZoom: 4
+  speedModifier: 1
+  rockMovement: 0.2
   inventory: {fileID: 796276476}
+  map: {fileID: 455596050}
   inventoryScript: {fileID: 984587645}
 --- !u!212 &984587643
 SpriteRenderer:
@@ -849,7 +852,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 984587641}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.061703943, y: -1.5426, z: 0}
+  m_LocalPosition: {x: 0.061703943, y: -80, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
