@@ -84,7 +84,6 @@ public class PlayerState : MonoBehaviour {
                 yAxis = Input.GetAxis("Vertical");
 
                 Vector3Int gridPosition = map.WorldToCell(transform.position);
-                Debug.Log(map.GetSprite(gridPosition).name);
                 if(map.GetSprite(gridPosition).name == "rock" || map.GetSprite(gridPosition).name == "snowyRock")
                 {
                     speedModifier = rockMovement;

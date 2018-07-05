@@ -14,6 +14,7 @@ public class MapGeneration : MonoBehaviour {
     public Tile tree;
     public Tile rock;
     public Tile snowyRock;
+    public Tile ore;
     public int width = 640;
     public int height = 480;
     public float scale = 5f;
@@ -54,6 +55,16 @@ public class MapGeneration : MonoBehaviour {
             if (limitations.Contains(test)) { return false; }
             return true;
         }
+        public bool CheckLimitations(string test)
+        {
+            if (test == "") { return true; }
+            if (test == self.name) { return false; }
+            foreach(Tile tile in limitations)
+            {
+                if (tile.name == test) { return false; }
+            }
+            return true;
+        }
         public Tile GetSelf()
         {
             return self;
@@ -71,9 +82,27 @@ public class MapGeneration : MonoBehaviour {
             GenerateRiver(randomLength, randomCoordinates.z, randomCoordinates.x, randomCoordinates.y, water);
         }
         SpawnLakes(5);
-        TileRules treeRule = new TileRules(tree, new List<Tile> { water });
-        GenerateArea(7, 10, 10, treeRule, true);
-        GetSpawnPoints();
+        TileRules treeRule = new TileRules(tree, new List<Tile> { water, rock, snowyRock, ground });
+        TileRules oreRule = new TileRules(ore, new List<Tile> { water });
+        Dictionary<string, List<SpawnPoint>> spawnPoints = GetSpawnPoints();
+        GenerateNodes(treeRule, 25, spawnPoints, 9);
+        GenerateNodes(oreRule, 100, spawnPoints, 1);
+    }
+
+    void GenerateNodes(TileRules nodetype, int amount, Dictionary<string, List<SpawnPoint>> spawns, int size)
+    {
+        List<SpawnPoint> availableSpawns = new List<SpawnPoint>();
+        foreach( string key in spawns.Keys)
+        {
+            if (nodetype.CheckLimitations(key)) { availableSpawns.AddRange(spawns[key]); }
+        }
+        for(int i = 0; i < amount; i++)
+        {
+            int iterator = Random.Range(0, availableSpawns.Count);
+            SpawnPoint spawn = availableSpawns[iterator];
+            GenerateArea(size, spawn.x, spawn.y, nodetype, true);
+            availableSpawns.Remove(spawn);
+        }
     }
 
     Dictionary<string, List<SpawnPoint>> GetSpawnPoints()
@@ -85,7 +114,6 @@ public class MapGeneration : MonoBehaviour {
             for(int y = 1; y < height - 1; y++)
             {
                 if (IsPeak(x, y, offset, 50)) {
-                    nodes.SetTile(new Vector3Int(x - width / 2, y - height / 2, 0), snowyRock);
                     if (map.GetTile(new Vector3Int(x - width / 2, y - height / 2, 0)) != null) {
                         if (!points.ContainsKey(map.GetTile(new Vector3Int(x - width / 2, y - height / 2, 0)).name))
                         {
@@ -164,13 +192,13 @@ public class MapGeneration : MonoBehaviour {
         return -1;
     }
 
-    bool CheckTilesAt(int x, int y, Tilemap map, TileRules tester)
+    bool CheckTilesAt(int x, int y, Tilemap checkedMap, TileRules tester)
     {
         for(int z = -10; z <= 10; z++)
         {
-            if(map.GetTile(new Vector3Int(x,y,z)) != null)
+            if(checkedMap.GetTile(new Vector3Int(x,y,z)) != null)
             {
-                if (!tester.CheckLimitations((Tile)map.GetTile(new Vector3Int(x, y, z)))){ return false; }
+                if (!tester.CheckLimitations((Tile)checkedMap.GetTile(new Vector3Int(x, y, z)))){ return false; }
             }
         }
         return true;
@@ -179,15 +207,15 @@ public class MapGeneration : MonoBehaviour {
 
     void GenerateArea(int length, int x, int y, TileRules tile, bool onExisting = false)
     {
-        if (Random.Range(1, 10) > 5) { length -= 1; }
-        length -= 1;
+        if (Random.Range(0, 10) > 5) { length -= 1; }
         if (length <= 0) { return; }
-        if (Random.Range(1, 10) == 7) { length += 3; }
+        length -= 1;
+        if (Random.Range(0, 10) <= 2) { length += 1; }
 
         // Create tile on current position
         if(onExisting && map.GetTile(new Vector3Int(x, y, 0)) != null)
         {
-            if (CheckTilesAt(x, y, nodes, tile))
+            if (CheckTilesAt(x, y, nodes, tile) && CheckTilesAt(x, y, map, tile))
             {
                 if(tile.GetSelf() == water)
                 {
@@ -196,7 +224,7 @@ public class MapGeneration : MonoBehaviour {
                 nodes.SetTile(new Vector3Int(x, y, 0), tile.GetSelf());
             }
         }
-        else if (!onExisting && CheckTilesAt(x, y, nodes, tile))
+        else if (!onExisting && CheckTilesAt(x, y, nodes, tile) && CheckTilesAt(x, y, map, tile))
         {
             if (tile.GetSelf() == water)
             {
@@ -210,7 +238,7 @@ public class MapGeneration : MonoBehaviour {
         {
             for (int north = 1; north < length + Random.Range(0,2); north++)
             {
-                if (CheckTilesAt(x, y + north, nodes, tile) && y + north < height/2)
+                if (CheckTilesAt(x, y + north, nodes, tile) && CheckTilesAt(x, y + north, map, tile) && y + north < height/2)
                 {
                     if ((onExisting && map.GetTile(new Vector3Int(x, y + north, 0)) == null)){ break; }
                     TilesAdded = true;
@@ -227,7 +255,7 @@ public class MapGeneration : MonoBehaviour {
         {
             for (int west = 1; west < length + Random.Range(0, 2); west++)
             {
-                if (CheckTilesAt(x - west, y, nodes, tile) && x - west > -width/2)
+                if (CheckTilesAt(x - west, y, nodes, tile) && CheckTilesAt(x - west, y, map, tile) && x - west > -width/2)
                 {
                     if (onExisting && map.GetTile(new Vector3Int(x - west, y, 0)) == null) { break; }
                     TilesAdded = true;
@@ -244,7 +272,7 @@ public class MapGeneration : MonoBehaviour {
         {
             for (int south = 1; south < length + Random.Range(0, 2); south++)
             {
-                if (CheckTilesAt(x, y - south, nodes, tile) && y - south > -height/2)
+                if (CheckTilesAt(x, y - south, nodes, tile) && CheckTilesAt(x, y - south, map, tile) && y - south > -height/2)
                 {
                     if (onExisting && map.GetTile(new Vector3Int(x, y - south, 0)) == null) { break; }
                     TilesAdded = true;
@@ -261,7 +289,7 @@ public class MapGeneration : MonoBehaviour {
         {
             for (int east = 1; east < length + Random.Range(0, 2); east++)
             {
-                if (CheckTilesAt(x + east, y, nodes, tile) && x + east < width/2)
+                if (CheckTilesAt(x + east, y, nodes, tile) && CheckTilesAt(x + east, y, map, tile) && x + east < width/2)
                 {
                     if (onExisting && map.GetTile(new Vector3Int(x + east, y, 0)) == null) { break; }
                     TilesAdded = true;
