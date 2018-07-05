@@ -103,7 +103,7 @@ public class PlayerState : MonoBehaviour {
                 
 
                 //TODO: Testaile eri statenvaihtotapoja, nyt ei voi tehdä täyskäännöstä suoraan.
-                if ( xAxis == 0 && yAxis == 0)
+                if ( xAxis == 0 && yAxis == 0 && Input.GetButtonDown("Horizontal") == false && Input.GetButtonDown("Vertical") == false)
                 {
                     state = playerState.Idle;
                 }               
