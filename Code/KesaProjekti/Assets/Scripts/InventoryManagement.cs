@@ -7,6 +7,7 @@ public class InventoryManagement : MonoBehaviour {
 
     public GridLayoutGroup inventoryGrid;
     public GridLayoutGroup toolBelt;
+    public GameObject resourceSlot;
 
     private bool inventoryChanged = true;
     private bool newTools = true;
@@ -14,28 +15,30 @@ public class InventoryManagement : MonoBehaviour {
     void Start () {
 		
 	}
-	
+	//Idea: Luo inventoryslot prefabit startissa, päivitä niiden tietoja ajonaikana.
+
 	// Update is called once per frame
 	void Update () {
 		
 	}
 
-    public void showItems(string itemName)
+    public void showItems(string itemName, int itemAmount)
     {
-        GameObject item = new GameObject();
-        Image NewImage = item.AddComponent<Image>();
-        //NewImage.sprite = pick;
-        NewImage.sprite = Resources.Load<Sprite>("RawResources/" + itemName);
-        item.GetComponent<RectTransform>().SetParent(inventoryGrid.transform);
-        item.SetActive(true);
-        item.transform.localScale = new Vector3(1, 1, 0);
+        
+
+        GameObject slot = Instantiate(resourceSlot);
+        slot.GetComponent<Image> ().sprite = Resources.Load<Sprite>("RawResources/" + itemName);
+        slot.GetComponentInChildren<Text>().text = itemAmount.ToString();
+        slot.GetComponent<RectTransform>().SetParent(inventoryGrid.transform);
+        slot.SetActive(true);
+        slot.transform.localScale = new Vector3(1, 1, 0);
     }
     public void getItems(Dictionary<string, int> items)
     {
         if (inventoryChanged == true) {
             foreach (var item in items)
             {
-                showItems(item.Key);
+                showItems(item.Key, item.Value);
             }
             inventoryChanged = false;
         }
