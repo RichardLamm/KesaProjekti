@@ -26,10 +26,12 @@ public class PlayerState : MonoBehaviour {
 
     public CanvasGroup inventory;
     public Tilemap map;
+    public Tilemap nodeMap;
     public InventoryManagement inventoryScript;
 
     private List<string> tools = new List<string> { "axe", "bucket", "pick", "scythe" };
     private Dictionary<string, int> items = new Dictionary<string, int>() { { "wood", 100 }, { "gold", 10 }, { "minerals", 30 } };
+    
     // Use this for initialization
     void Start () {
         //Setting the camera position
@@ -82,7 +84,7 @@ public class PlayerState : MonoBehaviour {
                 yAxis = Input.GetAxis("Vertical");
 
                 Vector3Int gridPosition = map.WorldToCell(transform.position);
-                if(map.GetSprite(gridPosition).name == "rock")
+                if(map.GetSprite(gridPosition).name == "rock" || map.GetSprite(gridPosition).name == "snowyRock")
                 {
                     speedModifier = rockMovement;
                 }
@@ -90,8 +92,15 @@ public class PlayerState : MonoBehaviour {
                 {
                     speedModifier = originalSpeedModifier;
                 }
-                transform.position += new Vector3(xAxis, yAxis, 0) * Time.deltaTime * speed * speedModifier;
-                mainCamera.transform.position = transform.position + cameraOffset;
+
+                Vector3 movementVector = new Vector3(xAxis, yAxis, 0) * Time.deltaTime * speed * speedModifier;
+                Vector3Int whereToMove = nodeMap.WorldToCell(transform.position + movementVector);
+                if (nodeMap.GetTile(whereToMove) == null && map.GetTile(whereToMove) !=null)
+                {
+                    transform.position += movementVector;
+                    mainCamera.transform.position = transform.position + cameraOffset;
+                }
+                
 
                 //TODO: Testaile eri statenvaihtotapoja, nyt ei voi tehdä täyskäännöstä suoraan.
                 if ( xAxis == 0 && yAxis == 0)

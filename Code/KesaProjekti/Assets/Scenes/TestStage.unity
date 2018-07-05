@@ -793,6 +793,7 @@ MonoBehaviour:
   rockMovement: 0.2
   inventory: {fileID: 796276476}
   map: {fileID: 455596050}
+  nodeMap: {fileID: 174381622}
   inventoryScript: {fileID: 984587645}
 --- !u!212 &984587643
 SpriteRenderer:
