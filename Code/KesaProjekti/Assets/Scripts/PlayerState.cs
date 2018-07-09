@@ -101,8 +101,6 @@ public class PlayerState : MonoBehaviour {
                     mainCamera.transform.position = transform.position + cameraOffset;
                 }
                 
-
-                //TODO: Testaile eri statenvaihtotapoja, nyt ei voi tehdä täyskäännöstä suoraan.
                 if ( xAxis == 0 && yAxis == 0 && Input.GetButtonDown("Horizontal") == false && Input.GetButtonDown("Vertical") == false)
                 {
                     state = playerState.Idle;
@@ -121,6 +119,7 @@ public class PlayerState : MonoBehaviour {
                 }
                 break;
             case playerState.Inventory:
+                inventoryScript.moveHighlight();
                 if (Input.GetButtonDown("Inventory"))
                 {
                     inventory.alpha = 0f;
