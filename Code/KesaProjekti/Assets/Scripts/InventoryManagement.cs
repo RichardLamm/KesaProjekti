@@ -10,6 +10,7 @@ public class InventoryManagement : MonoBehaviour {
     public GameObject resourceSlot;
 
     public int inventorySize = 20;
+    private int inventoryColumns;
 
     private bool inventoryChanged = true;
     private bool newTools = true;
@@ -30,6 +31,7 @@ public class InventoryManagement : MonoBehaviour {
             slot.transform.localScale = new Vector3(1, 1, 0);
             inventorySlots.Add(slot);
         }
+        inventoryColumns = inventoryGrid.constraintCount;
     }
 	//Idea: Luo inventoryslot prefabit startissa, päivitä niiden tietoja ajonaikana.
 
@@ -96,12 +98,26 @@ public class InventoryManagement : MonoBehaviour {
 
     public void moveHighlight()
     {
-        //inventorySlots[highlightIndex].transform.Find("Highlight").GetComponent<Image>().color = defaultColor;
-        //float xAxis = Input.GetAxis("Horizontal");
-        //if (xAxis > 0 && highlightIndex < inventorySize)
-        //{
-        //    inventorySlots[highlightIndex].transform.Find("Highlight").GetComponent<Image>().color = Color.clear;
-        //    highlightIndex++;
-        //}
+        int nextSlot;
+        inventorySlots[highlightIndex].transform.Find("Highlight").GetComponent<Image>().color = defaultColor;
+        if (Input.GetButtonDown("Horizontal") == true)
+        {
+            nextSlot = highlightIndex + (int)Input.GetAxisRaw("Horizontal");
+            if (nextSlot >= 0 && nextSlot < inventorySize)
+            {
+                inventorySlots[highlightIndex].transform.Find("Highlight").GetComponent<Image>().color = Color.clear;
+                highlightIndex = nextSlot;
+            }   
+
+        }
+        else if (Input.GetButtonDown("Vertical") == true)
+        {
+            nextSlot = highlightIndex - ((int)Input.GetAxisRaw("Vertical") * inventoryColumns);
+            if (nextSlot >= 0 && nextSlot < inventorySize)
+            {
+                inventorySlots[highlightIndex].transform.Find("Highlight").GetComponent<Image>().color = Color.clear;
+                highlightIndex = nextSlot;
+            }
+        }
     }
 }
