@@ -10,8 +10,11 @@ public class PlayerState : MonoBehaviour {
         Idle,
         Moving,
         Map,
-        Inventory
+        Inventory,
+        Crafting,
+        Harvesting
     };
+
     public int speed = 10;
     private playerState state = playerState.Idle;
     private float xAxis;
@@ -25,6 +28,7 @@ public class PlayerState : MonoBehaviour {
     public float rockMovement;
 
     public CanvasGroup inventory;
+    public CanvasGroup crafting;
     public Tilemap map;
     public Tilemap nodeMap;
     public InventoryManagement inventoryScript;
@@ -81,6 +85,13 @@ public class PlayerState : MonoBehaviour {
                     inventoryScript.getTools(tools);
                     state = playerState.Inventory;
                 }
+
+                else if (Input.GetButtonDown("Crafting"))
+                {
+                    crafting.alpha = 1f;
+                    crafting.blocksRaycasts = true;
+                    state = playerState.Crafting;
+                }
                 break;
 
             case playerState.Moving: 
@@ -115,6 +126,7 @@ public class PlayerState : MonoBehaviour {
                 xAxis = Input.GetAxis("Horizontal");
                 yAxis = Input.GetAxis("Vertical");
                 mainCamera.transform.position += new Vector3(xAxis, yAxis, 0) * Time.deltaTime * 2 * speed;
+
                 if (Input.GetButtonDown("Map"))
                 {
                     state = playerState.Idle;
@@ -122,12 +134,22 @@ public class PlayerState : MonoBehaviour {
                     mainCamera.orthographicSize = minZoom;
                 }
                 break;
+
             case playerState.Inventory:
                 inventoryScript.moveHighlight();
                 if (Input.GetButtonDown("Inventory"))
                 {
                     inventory.alpha = 0f;
                     inventory.blocksRaycasts = false;
+                    state = playerState.Idle;
+                }
+                break;
+
+            case playerState.Crafting:
+                if (Input.GetButtonDown("Crafting"))
+                {
+                    crafting.alpha = 0f;
+                    crafting.blocksRaycasts = false;
                     state = playerState.Idle;
                 }
                 break;
