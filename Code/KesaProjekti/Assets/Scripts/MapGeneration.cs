@@ -15,6 +15,7 @@ public class MapGeneration : MonoBehaviour {
     public Tile rock;
     public Tile snowyRock;
     public Tile ore;
+    public GameObject TilePrefab;
     public int width = 640;
     public int height = 480;
     public float scale = 5f;
@@ -87,6 +88,22 @@ public class MapGeneration : MonoBehaviour {
         Dictionary<string, List<SpawnPoint>> spawnPoints = GetSpawnPoints();
         GenerateNodes(treeRule, 25, spawnPoints, 9);
         GenerateNodes(oreRule, 100, spawnPoints, 1);
+    }
+
+    void InitTile(Tile tile, uint amount, float time)
+    {
+        tile.gameObject = Instantiate(TilePrefab);
+        tile.gameObject.GetComponent<TileScript>().Init(tile.name, amount, time);
+    }
+
+    void InitTiles()
+    {
+        // Tile, amount, gather time
+        InitTile(grass, 5, 1);
+        InitTile(water, 1, 1);
+        InitTile(tree, 10, 10);
+        InitTile(rock, 1, 5);
+        InitTile(ore, 1, 10);
     }
 
     void GenerateNodes(TileRules nodetype, int amount, Dictionary<string, List<SpawnPoint>> spawns, int size)
