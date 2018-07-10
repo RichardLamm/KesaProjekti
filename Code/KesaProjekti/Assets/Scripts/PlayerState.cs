@@ -26,6 +26,7 @@ public class PlayerState : MonoBehaviour {
     public float speedModifier = 1;
     private float originalSpeedModifier;
     public float rockMovement;
+    public float bufferSize = 0.5f;
 
     public CanvasGroup inventoryUI;
     public CanvasGroup crafting;
@@ -60,6 +61,20 @@ public class PlayerState : MonoBehaviour {
     Vector3 GetPosition()
     {
         return transform.position;
+    }
+
+    float createBuffer(float direction)
+    {
+        if (direction > 0)
+        {
+            direction = direction + bufferSize;
+        }
+
+        else if (direction < 0)
+        {
+            direction = direction - bufferSize;
+        }
+        return direction;
     }
     public void PlayerStateMachine()
     {
@@ -117,10 +132,14 @@ public class PlayerState : MonoBehaviour {
                 {
                     diagonalSpeed = 1;
                 }
-                
 
+                
                 Vector3 movementVector = new Vector3(xAxis, yAxis, 0) * Time.deltaTime * (speed/diagonalSpeed) * speedModifier;
-                Vector3Int whereToMove = nodeMap.WorldToCell(transform.position + movementVector);
+                Vector3 bufferVector = movementVector;
+                bufferVector.x = createBuffer(movementVector.x)/2;
+                bufferVector.y = createBuffer(movementVector.y);
+                Vector3Int whereToMove = nodeMap.WorldToCell(transform.position + bufferVector);
+
                 if (nodeMap.GetTile(whereToMove) == null && map.GetTile(whereToMove) !=null)
                 {
                     transform.position += movementVector;

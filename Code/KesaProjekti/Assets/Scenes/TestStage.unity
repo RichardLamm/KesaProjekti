@@ -1140,6 +1140,7 @@ MonoBehaviour:
   minZoom: 4
   speedModifier: 1
   rockMovement: 0.2
+  bufferSize: 0.5
   inventoryUI: {fileID: 796276476}
   crafting: {fileID: 78597139}
   map: {fileID: 455596050}
