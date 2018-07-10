@@ -74,6 +74,7 @@ public class MapGeneration : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
+        InitTiles();
         offset = (int)Random.Range(0f, 1000f);
         GenerateIsland();
         GenerateMountain(0.0015f, 0.0005f, 4);
