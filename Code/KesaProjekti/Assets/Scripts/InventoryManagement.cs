@@ -12,8 +12,8 @@ public class InventoryManagement : MonoBehaviour {
     public int inventorySize = 20;
     private int inventoryColumns;
 
-    private bool inventoryChanged = true;
-    private bool newTools = true;
+    public bool inventoryChanged = true;
+    public bool newTools = true;
     private int lastFreeSlot = 0;
     public int freeSlots;
     private List <GameObject> inventorySlots = new List<GameObject> {};
@@ -40,6 +40,17 @@ public class InventoryManagement : MonoBehaviour {
 	void Update () {
 		
 	}
+    public bool valueNeedsUpdating(string itemName, int itemAmount)
+    {
+
+        var slot = inventorySlots.Find(x => x.name == itemName);
+        if(slot.GetComponentInChildren<Text>().text != itemAmount.ToString())
+        {
+
+        }
+
+        return true;
+    }
 
     public void showItems(string itemName, int itemAmount)
     {
@@ -54,12 +65,20 @@ public class InventoryManagement : MonoBehaviour {
 
 
         //TODO:tiivistä inventoryä jos itemit tiputetaan sloteista tai niitä käytetään.
-        if(inventorySlots[lastFreeSlot].GetComponent<Image>().sprite == null)
+
+        if(inventorySlots.Find(x => x.name == itemName) != null)
+        {
+            var slot = inventorySlots.Find(x => x.name == itemName);
+            slot.GetComponentInChildren<Text>().text = itemAmount.ToString();
+        }
+
+        else if (inventorySlots[lastFreeSlot].GetComponent<Image>().sprite == null)
         {
             GameObject slot = inventorySlots[lastFreeSlot];
             slot.GetComponent<Image>().color = defaultColor;
             slot.GetComponent<Image>().sprite = Resources.Load<Sprite>("RawResources/" + itemName);
             slot.GetComponentInChildren<Text>().text = itemAmount.ToString();
+            slot.name = itemName;
 
             lastFreeSlot++;
             freeSlots--;

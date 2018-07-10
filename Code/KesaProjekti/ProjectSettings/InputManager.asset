@@ -70,11 +70,11 @@ InputManager:
     axis: 0
     joyNum: 0
   - serializedVersion: 3
-    m_Name: Crafting
+    m_Name: Craft
     descriptiveName: 
     descriptiveNegativeName: 
     negativeButton: 
-    positiveButton: space
+    positiveButton: c
     altNegativeButton: 
     altPositiveButton: 
     gravity: 1000
@@ -86,7 +86,7 @@ InputManager:
     axis: 0
     joyNum: 0
   - serializedVersion: 3
-    m_Name: Jump
+    m_Name: Harvest
     descriptiveName: 
     descriptiveNegativeName: 
     negativeButton: 

@@ -27,7 +27,7 @@ public class PlayerState : MonoBehaviour {
     private float originalSpeedModifier;
     public float rockMovement;
 
-    public CanvasGroup inventory;
+    public CanvasGroup inventoryUI;
     public CanvasGroup crafting;
     public Tilemap map;
     public Tilemap nodeMap;
@@ -45,8 +45,6 @@ public class PlayerState : MonoBehaviour {
         cameraOffset = mainCamera.transform.position - transform.position;
         originalSpeedModifier = speedModifier;
 
-        //Items are added at the start of the game. Remove/upgrade these if for some reason they are called
-        //before awakening the Inventory script
         inventoryScript.CreateInventorySlots();
         inventoryScript.getItems(items);
         inventoryScript.getTools(tools);
@@ -80,18 +78,23 @@ public class PlayerState : MonoBehaviour {
 
                 else if (Input.GetButtonDown("Inventory"))
                 {
-                    inventory.alpha = 1f;
-                    inventory.blocksRaycasts = true;
+                    inventoryUI.alpha = 1f;
+                    inventoryUI.blocksRaycasts = true;
                     inventoryScript.getItems(items);
                     inventoryScript.getTools(tools);
                     state = playerState.Inventory;
                 }
 
-                else if (Input.GetButtonDown("Crafting"))
+                else if (Input.GetButtonDown("Craft"))
                 {
                     crafting.alpha = 1f;
                     crafting.blocksRaycasts = true;
                     state = playerState.Crafting;
+                }
+
+                else if (Input.GetButtonDown("Harvest"))
+                {
+                    state = playerState.Harvesting;
                 }
                 break;
 
@@ -140,20 +143,37 @@ public class PlayerState : MonoBehaviour {
                 inventoryScript.moveHighlight();
                 if (Input.GetButtonDown("Inventory"))
                 {
-                    inventory.alpha = 0f;
-                    inventory.blocksRaycasts = false;
+                    inventoryUI.alpha = 0f;
+                    inventoryUI.blocksRaycasts = false;
                     state = playerState.Idle;
                 }
                 break;
 
             case playerState.Crafting:
-                if (Input.GetButtonDown("Crafting"))
+                if (Input.GetButtonDown("Craft"))
                 {
                     crafting.alpha = 0f;
                     crafting.blocksRaycasts = false;
                     state = playerState.Idle;
                 }
                 break;
+
+            case playerState.Harvesting:
+                int amount = 20;
+                string key = "banana";
+                if (items.ContainsKey(key) != false)
+                {
+                    items[key] = items[key] + amount;
+                }
+                else
+                {
+                    items[key] = amount;
+                }
+                inventoryScript.inventoryChanged = true;
+                //inventoryScript.valueNeedsUpdating("minerals", amount);
+                state = playerState.Idle;
+                break;
+
                 //Resurssien keräily state
                 //Paina nappia
                 //Etsi lähin node/mitä jos ei ole nodea lähellä

@@ -1140,7 +1140,7 @@ MonoBehaviour:
   minZoom: 4
   speedModifier: 1
   rockMovement: 0.2
-  inventory: {fileID: 796276476}
+  inventoryUI: {fileID: 796276476}
   crafting: {fileID: 78597139}
   map: {fileID: 455596050}
   nodeMap: {fileID: 174381622}
@@ -1219,6 +1219,8 @@ MonoBehaviour:
   resourceSlot: {fileID: 1989479369019876, guid: 1745b5feef079a642a10584cac75908e,
     type: 2}
   inventorySize: 20
+  inventoryChanged: 1
+  newTools: 1
   freeSlots: 0
 --- !u!1 &1186954651
 GameObject:
