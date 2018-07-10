@@ -112,7 +112,14 @@ public class PlayerState : MonoBehaviour {
                     speedModifier = originalSpeedModifier;
                 }
 
-                Vector3 movementVector = new Vector3(xAxis, yAxis, 0) * Time.deltaTime * speed * speedModifier;
+                float diagonalSpeed = (float)Mathf.Sqrt((yAxis * yAxis) + (xAxis * xAxis));
+                if (diagonalSpeed == 0f)
+                {
+                    diagonalSpeed = 1;
+                }
+                
+
+                Vector3 movementVector = new Vector3(xAxis, yAxis, 0) * Time.deltaTime * (speed/diagonalSpeed) * speedModifier;
                 Vector3Int whereToMove = nodeMap.WorldToCell(transform.position + movementVector);
                 if (nodeMap.GetTile(whereToMove) == null && map.GetTile(whereToMove) !=null)
                 {
