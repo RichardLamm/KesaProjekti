@@ -21,7 +21,7 @@ public class InventoryManagement : MonoBehaviour {
     private Vector4 defaultColor = new Vector4(1, 1, 1, 1);
 
     // Use this for initialization
-    void Awake () {
+    public void CreateInventorySlots () {
         for (int x = 0; x < inventorySize; x++)
         {
             GameObject slot = Instantiate(resourceSlot);

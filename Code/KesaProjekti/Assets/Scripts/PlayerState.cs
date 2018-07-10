@@ -44,9 +44,10 @@ public class PlayerState : MonoBehaviour {
         mainCamera.orthographicSize = minZoom;
         cameraOffset = mainCamera.transform.position - transform.position;
         originalSpeedModifier = speedModifier;
-        
+
         //Items are added at the start of the game. Remove/upgrade these if for some reason they are called
         //before awakening the Inventory script
+        inventoryScript.CreateInventorySlots();
         inventoryScript.getItems(items);
         inventoryScript.getTools(tools);
     }
