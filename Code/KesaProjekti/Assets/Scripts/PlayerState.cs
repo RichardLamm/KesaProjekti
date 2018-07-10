@@ -84,8 +84,8 @@ public class PlayerState : MonoBehaviour {
                 break;
 
             case playerState.Moving: 
-                xAxis = Input.GetAxis("Horizontal");
-                yAxis = Input.GetAxis("Vertical");
+                xAxis = Input.GetAxisRaw("Horizontal");
+                yAxis = Input.GetAxisRaw("Vertical");
 
                 Vector3Int gridPosition = map.WorldToCell(transform.position);
                 if(map.GetSprite(gridPosition).name == "rock" || map.GetSprite(gridPosition).name == "snowyRock")
