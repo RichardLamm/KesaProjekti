@@ -40,7 +40,11 @@ public class PlayerState : MonoBehaviour {
         mainCamera.orthographicSize = minZoom;
         cameraOffset = mainCamera.transform.position - transform.position;
         originalSpeedModifier = speedModifier;
-
+        
+        //Items are added at the start of the game. Remove/upgrade these if for some reason they are called
+        //before awakening the Inventory script
+        inventoryScript.getItems(items);
+        inventoryScript.getTools(tools);
     }
 
 
@@ -127,6 +131,14 @@ public class PlayerState : MonoBehaviour {
                     state = playerState.Idle;
                 }
                 break;
+                //Resurssien keräily state
+                //Paina nappia
+                //Etsi lähin node/mitä jos ei ole nodea lähellä
+                //kerää resursseja
+                //Nosta resurssit (resurssit hyvä päivittää inventoryyn tässä vaiheessa)
+                //Jos ei tilaa resurssit jäävät maahan
+                //Skillien kehittyminen?
+                //palaa automaattisesti Idleen kun keräys on tapahtunut
         }
     }
 }

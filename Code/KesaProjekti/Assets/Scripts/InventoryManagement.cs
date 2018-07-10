@@ -15,12 +15,13 @@ public class InventoryManagement : MonoBehaviour {
     private bool inventoryChanged = true;
     private bool newTools = true;
     private int lastFreeSlot = 0;
+    public int freeSlots;
     private List <GameObject> inventorySlots = new List<GameObject> {};
     private int highlightIndex = 0;
     private Vector4 defaultColor = new Vector4(1, 1, 1, 1);
 
     // Use this for initialization
-    void Start () {
+    void Awake () {
         for (int x = 0; x < inventorySize; x++)
         {
             GameObject slot = Instantiate(resourceSlot);
@@ -32,8 +33,8 @@ public class InventoryManagement : MonoBehaviour {
             inventorySlots.Add(slot);
         }
         inventoryColumns = inventoryGrid.constraintCount;
+        freeSlots = inventorySize;
     }
-	//Idea: Luo inventoryslot prefabit startissa, päivitä niiden tietoja ajonaikana.
 
 	// Update is called once per frame
 	void Update () {
@@ -61,8 +62,9 @@ public class InventoryManagement : MonoBehaviour {
             slot.GetComponentInChildren<Text>().text = itemAmount.ToString();
 
             lastFreeSlot++;
+            freeSlots--;
         }
-        else if (lastFreeSlot < inventorySize)
+        else if (lastFreeSlot < inventorySize)//Käytä freeslotteja?
         {
             //Jotain, selviää kun "tiivistys" lisätty
         }
