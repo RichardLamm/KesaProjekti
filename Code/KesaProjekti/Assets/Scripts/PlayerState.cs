@@ -15,6 +15,7 @@ public class PlayerState : MonoBehaviour {
         Harvesting
     };
 
+    public BoundsInt area;
     public int speed = 10;
     private playerState state = playerState.Idle;
     private float xAxis;
@@ -108,7 +109,7 @@ public class PlayerState : MonoBehaviour {
                 }
 
                 else if (Input.GetButtonDown("Harvest"))
-                {
+                {                   
                     state = playerState.Harvesting;
                 }
                 break;
@@ -185,8 +186,24 @@ public class PlayerState : MonoBehaviour {
                 break;
 
             case playerState.Harvesting:
-                int amount = 20;
-                string key = "banana";
+                List<Tile> nodes = new List<Tile> ();
+                var playerPosition = map.WorldToCell(transform.position);
+                playerPosition.x = playerPosition.x - 1;
+                playerPosition.y = playerPosition.y - 1;
+                area.position = map.WorldToCell(playerPosition);
+                
+                var temp = nodeMap.GetTilesBlock(area);
+                foreach (var tile in temp)
+                {
+                    if (tile != null)
+                    {
+                        nodes.Add((Tile)tile);                        
+                    }
+                }
+
+                var pair = nodes[0].gameObject.GetComponent<TileScript>().getGathered();
+                int amount = (int)pair.gatherAmount;
+                string key = pair.gatherName;
                 if (items.ContainsKey(key) != false)
                 {
                     items[key] = items[key] + amount;
@@ -198,16 +215,8 @@ public class PlayerState : MonoBehaviour {
                 inventoryScript.inventoryChanged = true;
                 //inventoryScript.valueNeedsUpdating("minerals", amount);
                 state = playerState.Idle;
+                
                 break;
-
-                //Resurssien keräily state
-                //Paina nappia
-                //Etsi lähin node/mitä jos ei ole nodea lähellä
-                //kerää resursseja
-                //Nosta resurssit (resurssit hyvä päivittää inventoryyn tässä vaiheessa)
-                //Jos ei tilaa resurssit jäävät maahan
-                //Skillien kehittyminen?
-                //palaa automaattisesti Idleen kun keräys on tapahtunut
         }
     }
 }
