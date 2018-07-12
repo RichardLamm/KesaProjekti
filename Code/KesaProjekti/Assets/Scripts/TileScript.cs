@@ -19,6 +19,7 @@ public class TileScript : MonoBehaviour {
         }
     }
 
+    // Store values to the class
     public void Init(string name, uint amount, float gatherTime)
     {
         resourceName_ = name;
@@ -26,11 +27,13 @@ public class TileScript : MonoBehaviour {
         gatherTime_ = gatherTime;
     }
 
+    // Returns gather time
     public float Gather()
     {
         return gatherTime_;
     }
 
+    // Returns pair containing amount of gathered resource and it's name
     public GatherPair getGathered()
     {
         return new GatherPair(amount_, resourceName_);

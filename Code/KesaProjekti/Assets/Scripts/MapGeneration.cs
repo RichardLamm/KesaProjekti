@@ -27,7 +27,9 @@ public class MapGeneration : MonoBehaviour {
     public int randomLength = 30;
     public int centerRadius = 10;
     private int lastDirection = -1;
-    private struct SpawnPoint
+
+
+    public struct SpawnPoint
     {
         public int x;
         public int y;
@@ -89,6 +91,8 @@ public class MapGeneration : MonoBehaviour {
         Dictionary<string, List<SpawnPoint>> spawnPoints = GetSpawnPoints();
         GenerateNodes(treeRule, 25, spawnPoints, 9);
         GenerateNodes(oreRule, 100, spawnPoints, 1);
+        PlayerState playerScript = GameObject.Find("Player").GetComponent<PlayerState>();
+        playerScript.SetSelfPosition();
     }
 
     void InitTile(Tile tile, uint amount, float time)
@@ -123,7 +127,7 @@ public class MapGeneration : MonoBehaviour {
         }
     }
 
-    Dictionary<string, List<SpawnPoint>> GetSpawnPoints()
+    public Dictionary<string, List<SpawnPoint>> GetSpawnPoints()
     {
         int offset = Random.Range(0, 10000);
         Dictionary<string, List<SpawnPoint> > points = new Dictionary<string, List<SpawnPoint>>();

@@ -25,7 +25,7 @@ public class PlayerState : MonoBehaviour {
     public int maxZoom;
     public int minZoom;
     public float speedModifier = 1;
-    private float originalSpeedModifier;
+    private float originalSpeedModifier = 1;
     public float rockMovement;
     public float bufferSize = 0.5f;
 
@@ -34,25 +34,27 @@ public class PlayerState : MonoBehaviour {
     public Tilemap map;
     public Tilemap nodeMap;
     public InventoryManagement inventoryScript;
+    public MapGeneration mapScript;
 
     private List<string> tools = new List<string> { "axe", "bucket", "pick", "scythe" };
     private Dictionary<string, int> items = new Dictionary<string, int>() { { "wood", 100 }, { "gold", 10 }, { "minerals", 30 } };
     
     // Use this for initialization
     void Start () {
-        //Setting the camera position
-        Vector3 playerPosition = GetPosition();
-        mainCamera.transform.position = new Vector3(playerPosition.x, playerPosition.y, -10);
-        mainCamera.orthographicSize = minZoom;
-        cameraOffset = mainCamera.transform.position - transform.position;
-        originalSpeedModifier = speedModifier;
-
         inventoryScript.CreateInventorySlots();
         inventoryScript.getItems(items);
         inventoryScript.getTools(tools);
     }
 
-
+    public void SetSelfPosition()
+    {
+        //Setting the camera position
+        Vector3 playerPosition = GetPosition();
+        transform.position = playerPosition;
+        mainCamera.transform.position = new Vector3(playerPosition.x, playerPosition.y, -10);
+        mainCamera.orthographicSize = minZoom;
+        cameraOffset = mainCamera.transform.position - transform.position;
+    }
 	
 	// Update is called once per frame
 	void Update () {
@@ -61,7 +63,24 @@ public class PlayerState : MonoBehaviour {
 
     Vector3 GetPosition()
     {
-        return transform.position;
+        Dictionary<string, List<MapGeneration.SpawnPoint>> spawnDict = GameObject.Find("Grid").GetComponent<MapGeneration>().GetSpawnPoints();
+        List<MapGeneration.SpawnPoint> possibleSpawns = new List<MapGeneration.SpawnPoint>();
+        foreach(string type in spawnDict.Keys)
+        {
+            if(type == "grass" || type == "ground")
+            {
+                possibleSpawns.AddRange(spawnDict[type]);
+            }
+        }
+        int random = 0;
+        MapGeneration.SpawnPoint spawn = new MapGeneration.SpawnPoint();
+        // To ensure that player won't spawn in a node
+        do
+        {
+            random = Random.Range(0, possibleSpawns.Count - 1);
+            spawn = possibleSpawns[random];
+        } while (nodeMap.GetTile(new Vector3Int(spawn.x, spawn.y, 0)) != null);
+        return new Vector3(spawn.x, spawn.y, 0);
     }
 
     float createBuffer(float direction)
