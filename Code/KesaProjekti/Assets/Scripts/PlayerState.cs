@@ -72,6 +72,8 @@ public class PlayerState : MonoBehaviour {
                 possibleSpawns.AddRange(spawnDict[type]);
             }
         }
+        // Just to ensure that if no spawns are found, the game won't crash
+        if(possibleSpawns.Count == 0) { return transform.position; }
         int random = 0;
         MapGeneration.SpawnPoint spawn = new MapGeneration.SpawnPoint();
         // To ensure that player won't spawn in a node
@@ -79,6 +81,7 @@ public class PlayerState : MonoBehaviour {
         {
             random = Random.Range(0, possibleSpawns.Count - 1);
             spawn = possibleSpawns[random];
+            possibleSpawns.Remove(spawn);
         } while (nodeMap.GetTile(new Vector3Int(spawn.x, spawn.y, 0)) != null);
         return new Vector3(spawn.x, spawn.y, 0);
     }
@@ -220,21 +223,24 @@ public class PlayerState : MonoBehaviour {
                     }
                 }
 
-                var pair = nodes[0].gameObject.GetComponent<TileScript>().getGathered();
-                int amount = (int)pair.gatherAmount;
-                string key = pair.gatherName;
-                if (items.ContainsKey(key) != false)
+                // If there are no nodes around, skip this
+                if (nodes.Count != 0)
                 {
-                    items[key] = items[key] + amount;
+                    var pair = nodes[0].gameObject.GetComponent<TileScript>().getGathered();
+                    int amount = (int)pair.gatherAmount;
+                    string key = pair.gatherName;
+                    if (items.ContainsKey(key) != false)
+                    {
+                        items[key] = items[key] + amount;
+                    }
+                    else
+                    {
+                        items[key] = amount;
+                    }
+                    inventoryScript.inventoryChanged = true;
+                    //inventoryScript.valueNeedsUpdating("minerals", amount);
                 }
-                else
-                {
-                    items[key] = amount;
-                }
-                inventoryScript.inventoryChanged = true;
-                //inventoryScript.valueNeedsUpdating("minerals", amount);
                 state = playerState.Idle;
-                
                 break;
         }
     }
