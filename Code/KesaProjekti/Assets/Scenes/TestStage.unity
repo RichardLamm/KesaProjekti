@@ -226,7 +226,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 174381619}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 6}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1656324091}
@@ -266,7 +266,7 @@ TilemapRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 1
   m_ChunkSize: {x: 32, y: 32, z: 32}
   m_ChunkCullingBounds: {x: 0, y: 0, z: 0}
   m_MaxChunkCount: 16
@@ -596,7 +596,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 455596047}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 8}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1656324091}
@@ -1059,6 +1059,36 @@ CanvasRenderer:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 657770679}
+--- !u!1 &756745924
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 756745925}
+  m_Layer: 0
+  m_Name: Prefabs
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &756745925
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 756745924}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 148.72751, y: -142.05838, z: -1.1875}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 1905200173}
+  - {fileID: 2112084784}
+  m_Father: {fileID: 0}
+  m_RootOrder: 5
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &796276474
 GameObject:
   m_ObjectHideFlags: 0
@@ -1149,6 +1179,7 @@ MonoBehaviour:
   map: {fileID: 455596050}
   nodeMap: {fileID: 174381622}
   inventoryScript: {fileID: 984587645}
+  mapScript: {fileID: 0}
 --- !u!212 &984587643
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -1639,7 +1670,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1656324089}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 5}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 455596048}
@@ -1922,12 +1953,12 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1905200171}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 148.72751, y: -142.05838, z: -1.1875}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 5
+  m_Father: {fileID: 756745925}
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2072154527
 GameObject:
@@ -2003,3 +2034,84 @@ CanvasRenderer:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 2072154527}
+--- !u!1 &2112084783
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 2112084784}
+  - component: {fileID: 2112084786}
+  - component: {fileID: 2112084785}
+  m_Layer: 0
+  m_Name: GrassTile
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2112084784
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 2112084783}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 756745925}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2112084785
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 2112084783}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a4b64f7675692a04fbd336a7cd35ecde, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  aroundSelf:
+    m_Position: {x: 0, y: 0, z: 0}
+    m_Size: {x: 3, y: 3, z: 1}
+  map: {fileID: 455596050}
+  GrassAllAround: {fileID: 11400000, guid: f77946aded0335c4da1cce689ee2d216, type: 2}
+  GrassWithoutNeighbours: {fileID: 11400000, guid: 203d68c1364cd3c4aa06e1294508115a,
+    type: 2}
+  GrassTop: {fileID: 11400000, guid: ba4d4b3ada33af447ae82e8d83c5a4b8, type: 2}
+  GrassRight: {fileID: 11400000, guid: 532536b6c8d379c4fb933c04dfe5f3c9, type: 2}
+  GrassBottom: {fileID: 11400000, guid: 79274a8cc1139fc449eefd8e8b1b888c, type: 2}
+  GrassLeft: {fileID: 11400000, guid: 1b787174f4494ba4ebf391a679ba529c, type: 2}
+  GrassTopRight: {fileID: 11400000, guid: fe3de1de6ea15584089d8065bfcca640, type: 2}
+  GrassTopLeft: {fileID: 11400000, guid: f765473347950c745bba6a24e11886e2, type: 2}
+  GrassBotRight: {fileID: 11400000, guid: 35c3718ebecbdfd48a426d461fbd873d, type: 2}
+  GrassBotLeft: {fileID: 11400000, guid: fdb3d7f0de0898145be467fcd00c78f2, type: 2}
+  GrassTopBot: {fileID: 11400000, guid: bbbf83d2ff0c17d43a8835fa05e2b0a5, type: 2}
+  GrassLeftRight: {fileID: 11400000, guid: c6d244dedf7c10140962d21f707cde2c, type: 2}
+  GrassAllButTopRightCorner: {fileID: 11400000, guid: 934cce197cf683545a9a50686a961d45,
+    type: 2}
+  GrassAllButTopLeftCorner: {fileID: 11400000, guid: 1bedd2819d5faf54aa5135258108001c,
+    type: 2}
+  GrassAllButBotRightCorner: {fileID: 11400000, guid: b927c5cc87e17a44b9de2c1880e169b9,
+    type: 2}
+  GrassAllButBotLeftCorner: {fileID: 11400000, guid: 5ecccf0fc45aba247b2450ed159c5c3f,
+    type: 2}
+  GrassAllButTop: {fileID: 11400000, guid: fad45c7f2101dcb49a33ebff9f9f2292, type: 2}
+  GrassAllButRight: {fileID: 11400000, guid: 0363747817af59d49b5d92f06ee97903, type: 2}
+  GrassAllButBottom: {fileID: 11400000, guid: 190c703a2eb19744581f8cf5b54d9ab9, type: 2}
+  GrassAllButLeft: {fileID: 11400000, guid: afa14866b676dca498efeb93c9bdb73f, type: 2}
+--- !u!114 &2112084786
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 2112084783}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e44bf8144a5835a4c986de9074548fee, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

@@ -93,11 +93,38 @@ public class MapGeneration : MonoBehaviour {
         GenerateNodes(oreRule, 100, spawnPoints, 1);
         PlayerState playerScript = GameObject.Find("Player").GetComponent<PlayerState>();
         playerScript.SetSelfPosition();
+        SmoothEdges();
+    }
+
+    void SmoothEdges()
+    {
+        Tile tempTile;
+        for(int x = 0; x < width; x++)
+        {
+            for(int y = 0; y < height; y++)
+            {
+                tempTile = (Tile)map.GetTile(new Vector3Int(x - (width / 2), y - (height / 2), 0));
+                if(tempTile != null)
+                {
+                    if(tempTile == grass)
+                    {
+                        map.SetTile(new Vector3Int(x - (width / 2), y - (height / 2), 0),
+                            tempTile.gameObject.GetComponent<GrassTileRule>().CheckNeighbours(new Vector3Int(x - (width / 2), y - (height / 2), 0), tempTile));
+                    }
+                }
+            }
+        }
     }
 
     void InitTile(Tile tile, uint amount, float time)
     {
-        tile.gameObject = Instantiate(TilePrefab);
+        if (tile == grass) {
+            tile.gameObject = Instantiate(GameObject.Find("GrassTile"));
+        }
+        else
+        {
+            tile.gameObject = Instantiate(TilePrefab);
+        }
         tile.gameObject.GetComponent<TileScript>().Init(tile.name, amount, time);
     }
 

@@ -213,7 +213,16 @@ public class PlayerState : MonoBehaviour {
                 playerPosition.x = playerPosition.x - 1;
                 playerPosition.y = playerPosition.y - 1;
                 area.position = map.WorldToCell(playerPosition);
-                
+
+                var test = map.GetTilesBlock(area);
+                for( int i = 0; i < test.Length; i++)
+                {
+                    if (i != 4 && test[i] != null)
+                    {
+                        Debug.Log(test[i].name);
+                    }
+                }
+
                 var temp = nodeMap.GetTilesBlock(area);
                 foreach (var tile in temp)
                 {
