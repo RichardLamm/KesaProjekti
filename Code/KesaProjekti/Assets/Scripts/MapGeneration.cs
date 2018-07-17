@@ -9,7 +9,7 @@ public class MapGeneration : MonoBehaviour {
     public Tilemap map;
     public Tilemap nodes;
     public Tile grass;
-    public Tile ground;
+    public Tile sand;
     public Tile water;
     public Tile tree;
     public Tile rock;
@@ -86,7 +86,7 @@ public class MapGeneration : MonoBehaviour {
             GenerateRiver(randomLength, randomCoordinates.z, randomCoordinates.x, randomCoordinates.y, water);
         }
         SpawnLakes(5);
-        TileRules treeRule = new TileRules(tree, new List<Tile> { water, rock, snowyRock, ground });
+        TileRules treeRule = new TileRules(tree, new List<Tile> { water, rock, snowyRock, sand });
         TileRules oreRule = new TileRules(ore, new List<Tile> { water });
         Dictionary<string, List<SpawnPoint>> spawnPoints = GetSpawnPoints();
         GenerateNodes(treeRule, 25, spawnPoints, 9);
@@ -96,7 +96,7 @@ public class MapGeneration : MonoBehaviour {
         SmoothEdges();
     }
 
-    void SmoothEdges()
+    public void SmoothEdges()
     {
         Tile tempTile;
         for(int x = 0; x < width; x++)
@@ -106,10 +106,10 @@ public class MapGeneration : MonoBehaviour {
                 tempTile = (Tile)map.GetTile(new Vector3Int(x - (width / 2), y - (height / 2), 0));
                 if(tempTile != null)
                 {
-                    if(tempTile == grass)
+                    if(tempTile == grass || tempTile == sand)
                     {
                         map.SetTile(new Vector3Int(x - (width / 2), y - (height / 2), 0),
-                            tempTile.gameObject.GetComponent<GrassTileRule>().CheckNeighbours(new Vector3Int(x - (width / 2), y - (height / 2), 0), tempTile));
+                            tempTile.gameObject.GetComponent<TileRule>().CheckNeighbours(new Vector3Int(x - (width / 2), y - (height / 2), 0), tempTile));
                     }
                 }
             }
@@ -121,6 +121,10 @@ public class MapGeneration : MonoBehaviour {
         if (tile == grass) {
             tile.gameObject = Instantiate(GameObject.Find("GrassTile"));
         }
+        else if(tile == sand)
+        {
+            tile.gameObject = Instantiate(GameObject.Find("SandTile"));
+        }
         else
         {
             tile.gameObject = Instantiate(TilePrefab);
@@ -130,8 +134,11 @@ public class MapGeneration : MonoBehaviour {
 
     void InitTiles()
     {
+        GameObject.Find("GrassTile").GetComponent<TileRule>().SetAllowedTiles(new List<string>() { "grass", "rock" });
+        GameObject.Find("SandTile").GetComponent<TileRule>().SetAllowedTiles(new List<string>() { "sand", "grass", "water", "rock" });
         // Tile, amount, gather time
         InitTile(grass, 5, 1);
+        InitTile(sand, 1, 1);
         InitTile(water, 1, 1);
         InitTile(tree, 10, 10);
         InitTile(rock, 1, 5);
@@ -386,7 +393,7 @@ public class MapGeneration : MonoBehaviour {
             for (int j = 0; j < height; j++)
             {
                 float depth = CalculateDepth(i, j);
-                if (depth > groundTrigger && depth <= grassTrigger) { map.SetTile(new Vector3Int(i - width / 2, j - height / 2, 0), ground); }
+                if (depth > groundTrigger && depth <= grassTrigger) { map.SetTile(new Vector3Int(i - width / 2, j - height / 2, 0), sand); }
                 if (depth > grassTrigger) { map.SetTile(new Vector3Int(i - width / 2, j - height / 2, 0), grass); }
             }
         }
