@@ -34,6 +34,7 @@ public class InventoryManagement : MonoBehaviour {
         }
         inventoryColumns = inventoryGrid.constraintCount;
         freeSlots = inventorySize;
+        
     }
 
 	// Update is called once per frame

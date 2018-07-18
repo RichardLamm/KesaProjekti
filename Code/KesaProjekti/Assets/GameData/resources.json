@@ -1,0 +1,12 @@
+{
+	"Tiles": [
+	{           
+	"resource": "wood",            
+	"stackSize": 10
+	},
+	{            
+	"resource": "minerals",
+	"stackSize": 2
+	}   
+	]}
+	

@@ -28,6 +28,8 @@ public class MapGeneration : MonoBehaviour {
     public int centerRadius = 10;
     private int lastDirection = -1;
 
+    public JsonData dataParser;
+
 
     public struct SpawnPoint
     {
@@ -94,6 +96,8 @@ public class MapGeneration : MonoBehaviour {
         PlayerState playerScript = GameObject.Find("Player").GetComponent<PlayerState>();
         playerScript.SetSelfPosition();
         SmoothEdges();
+
+        dataParser.readData();
     }
 
     public void SmoothEdges()
