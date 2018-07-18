@@ -1728,6 +1728,7 @@ GameObject:
   - component: {fileID: 1656324091}
   - component: {fileID: 1656324090}
   - component: {fileID: 1656324092}
+  - component: {fileID: 1656324093}
   m_Layer: 0
   m_Name: Grid
   m_TagString: Untagged
@@ -1791,6 +1792,18 @@ MonoBehaviour:
   offset: 1000
   randomLength: 640
   centerRadius: 15
+  dataParser: {fileID: 1656324093}
+--- !u!114 &1656324093
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1656324089}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 14999fc0166e7034bbaa819f2b09bab6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1663373097
 GameObject:
   m_ObjectHideFlags: 0
