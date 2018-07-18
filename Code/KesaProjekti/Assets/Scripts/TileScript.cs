@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Threading;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
@@ -27,15 +28,13 @@ public class TileScript : MonoBehaviour {
         gatherTime_ = gatherTime;
     }
 
-    // Returns gather time
-    public float Gather()
-    {
-        return gatherTime_;
-    }
-
     // Returns pair containing amount of gathered resource and it's name
-    public GatherPair getGathered()
+    public GatherPair Gather(string toolName)
     {
+        // Get data from the data base according to the tile and tool
+        // TODO: get sleepTime, amount and resourceName from the data base
+        int sleepTime = 500;
+        Thread.Sleep(sleepTime);
         return new GatherPair(amount_, resourceName_);
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Threading;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
@@ -226,7 +227,16 @@ public class PlayerState : MonoBehaviour {
                 // If there are no nodes around, skip this
                 if (nodes.Count != 0)
                 {
-                    var pair = nodes[0].gameObject.GetComponent<TileScript>().getGathered();
+                    TileScript.GatherPair pair = new TileScript.GatherPair();
+                    TileScript nodesScript = nodes[0].gameObject.GetComponent<TileScript>();
+                    Thread gatherThread = new Thread(() => { pair = nodesScript.Gather("axe"); });
+                    gatherThread.Start();
+                    while (gatherThread.IsAlive)
+                    {
+                        // TODO: interrupt with certain key event
+                        if (false) gatherThread.Abort();
+                    }
+                    gatherThread.Join();
                     int amount = (int)pair.gatherAmount;
                     string key = pair.gatherName;
                     if (items.ContainsKey(key) != false)
