@@ -12,6 +12,7 @@ public class JsonData : MonoBehaviour
     {
         public string resource;
         public int stackSize;
+        public int harvestTime;
     }
 
     [System.Serializable]

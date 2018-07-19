@@ -2,11 +2,13 @@
 	"Tiles": [
 	{           
 	"resource": "wood",            
-	"stackSize": 10
+	"stackSize": 10,
+	"harvestTime": 10
 	},
 	{            
 	"resource": "minerals",
-	"stackSize": 2
+	"stackSize": 2,
+	"harvestTime": 15
 	}   
 	]}
 	
