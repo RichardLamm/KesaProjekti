@@ -6,6 +6,7 @@ using System.IO;
 public class JsonData : MonoBehaviour
 {
     private string path = "/GameData/resources.json";
+    private Dictionary<string, ResourceData> database = new Dictionary<string, ResourceData>(); 
 
     [System.Serializable]
     public class ResourceData
@@ -50,7 +51,13 @@ public class JsonData : MonoBehaviour
             string json = File.ReadAllText(dataPath);
             ResourceData[] data = JsonHelper.FromJson<ResourceData>(json);
             //DataWrapper[] player = JsonHelper.ToJson(json);
-            Debug.Log(data.Length);
+            Debug.Log(data[0].resource);
+            Debug.Log(data[1].resource);
+
+            foreach (ResourceData dataPoint in data)
+            {
+                database.Add(dataPoint.resource, dataPoint);
+            }
 
         }
         
