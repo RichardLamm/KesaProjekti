@@ -234,7 +234,7 @@ public class PlayerState : MonoBehaviour {
                     while (gatherThread.IsAlive)
                     {
                         // TODO: interrupt with certain key event
-                        if (false) gatherThread.Abort();
+                        if (Input.GetButtonDown("Interrupt")){ gatherThread.Abort(); }
                     }
                     gatherThread.Join();
                     int amount = (int)pair.gatherAmount;
