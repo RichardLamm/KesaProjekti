@@ -42,9 +42,7 @@ public class PlayerState : MonoBehaviour {
     
     // Use this for initialization
     void Start () {
-        inventoryScript.CreateInventorySlots();
-        inventoryScript.getItems(items);
-        inventoryScript.getTools(tools);
+        
     }
 
     public void SetSelfPosition()
@@ -55,6 +53,11 @@ public class PlayerState : MonoBehaviour {
         mainCamera.transform.position = new Vector3(playerPosition.x, playerPosition.y, -10);
         mainCamera.orthographicSize = minZoom;
         cameraOffset = mainCamera.transform.position - transform.position;
+
+        inventoryScript.CreateInventorySlots();
+        inventoryScript.CreateStartingInventory();
+        inventoryScript.GetItems();
+        inventoryScript.GetTools();
     }
 	
 	// Update is called once per frame
@@ -119,8 +122,8 @@ public class PlayerState : MonoBehaviour {
                 {
                     inventoryUI.alpha = 1f;
                     inventoryUI.blocksRaycasts = true;
-                    inventoryScript.getItems(items);
-                    inventoryScript.getTools(tools);
+                    //inventoryScript.getItems(items);
+                    //inventoryScript.getTools(tools);
                     state = playerState.Inventory;
                 }
 
@@ -190,7 +193,7 @@ public class PlayerState : MonoBehaviour {
                 break;
 
             case playerState.Inventory:
-                inventoryScript.moveHighlight();
+                inventoryScript.MoveHighlight();
                 if (Input.GetButtonDown("Inventory"))
                 {
                     inventoryUI.alpha = 0f;

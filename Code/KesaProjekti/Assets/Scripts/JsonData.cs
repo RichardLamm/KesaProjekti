@@ -57,15 +57,26 @@ public class JsonData : MonoBehaviour
             foreach (ResourceData dataPoint in data)
             {
                 database.Add(dataPoint.tile, dataPoint);
-                inventoryDatabase.Add(dataPoint.resource, dataPoint.stackSize);
-                
+                inventoryDatabase[dataPoint.resource] = dataPoint.stackSize;
+
             }
 
         }
         
     }
 
-
+    public int GetStackSize(string resource)
+    {
+        if (inventoryDatabase.ContainsKey(resource))
+        {
+            return inventoryDatabase[resource];
+        }
+        else
+        {
+            
+            return -1;
+        }
+    }
 public static class JsonHelper
 {
 

@@ -8,6 +8,7 @@ public class InventoryManagement : MonoBehaviour {
     public GridLayoutGroup inventoryGrid;
     public GridLayoutGroup toolBelt;
     public GameObject resourceSlot;
+    public JsonData resourceData;
 
     public int inventorySize = 20;
     private int inventoryColumns;
@@ -17,8 +18,19 @@ public class InventoryManagement : MonoBehaviour {
     private int lastFreeSlot = 0;
     public int freeSlots;
     private List <GameObject> inventorySlots = new List<GameObject> {};
+
+    private List<string> tools = new List<string> { "axe", "bucket", "pick", "scythe" };
+    private Dictionary<string, stackData> items = new Dictionary<string, stackData>() {};
+    private List<string> startingResources = new List<string> { "wood", "minerals"};
+
     private int highlightIndex = 0;
     private Vector4 defaultColor = new Vector4(1, 1, 1, 1);
+
+     public struct stackData
+    {
+        public int stackSize;
+        public int amount;
+    }
 
     // Use this for initialization
     public void CreateInventorySlots () {
@@ -37,11 +49,23 @@ public class InventoryManagement : MonoBehaviour {
         
     }
 
+    public void CreateStartingInventory()
+    {
+        foreach (string resource in startingResources)
+        {
+            stackData stackInfo;
+            stackInfo.stackSize = resourceData.GetStackSize(resource);
+            stackInfo.amount = stackInfo.stackSize;
+            items[resource] = stackInfo;
+        }
+        Debug.Log(items.Count);
+    }
+
 	// Update is called once per frame
 	void Update () {
 		
 	}
-    public bool valueNeedsUpdating(string itemName, int itemAmount)
+    public bool ValueNeedsUpdating(string itemName, int itemAmount)
     {
 
         var slot = inventorySlots.Find(x => x.name == itemName);
@@ -53,24 +77,14 @@ public class InventoryManagement : MonoBehaviour {
         return true;
     }
 
-    public void showItems(string itemName, int itemAmount)
+    public void ShowItems(string itemName, stackData itemAmount)
     {
-        //GameObject slot = Instantiate(resourceSlot);
-        //slot.GetComponent<Image> ().sprite = Resources.Load<Sprite>("RawResources/" + itemName);
-        //slot.GetComponentInChildren<Text>().text = itemAmount.ToString();
-        //slot.GetComponent<RectTransform>().SetParent(inventoryGrid.transform);
-        //var highlight = slot.transform.Find("Highlight").GetComponent<Image>().color;
-        //highlight.a = 0f;
-        //slot.SetActive(true);
-        //slot.transform.localScale = new Vector3(1, 1, 0);
-
-
         //TODO:tiivistä inventoryä jos itemit tiputetaan sloteista tai niitä käytetään.
 
         if(inventorySlots.Find(x => x.name == itemName) != null)
         {
             var slot = inventorySlots.Find(x => x.name == itemName);
-            slot.GetComponentInChildren<Text>().text = itemAmount.ToString();
+            slot.GetComponentInChildren<Text>().text = itemAmount.amount.ToString();
         }
 
         else if (inventorySlots[lastFreeSlot].GetComponent<Image>().sprite == null)
@@ -78,7 +92,7 @@ public class InventoryManagement : MonoBehaviour {
             GameObject slot = inventorySlots[lastFreeSlot];
             slot.GetComponent<Image>().color = defaultColor;
             slot.GetComponent<Image>().sprite = Resources.Load<Sprite>("RawResources/" + itemName);
-            slot.GetComponentInChildren<Text>().text = itemAmount.ToString();
+            slot.GetComponentInChildren<Text>().text = itemAmount.amount.ToString();
             slot.name = itemName;
 
             lastFreeSlot++;
@@ -89,19 +103,25 @@ public class InventoryManagement : MonoBehaviour {
             //Jotain, selviää kun "tiivistys" lisätty
         }
     }
-    public void getItems(Dictionary<string, int> items)
+    public void GetItems()
     {
         if (inventoryChanged == true) {
             foreach (var item in items)
             {
-                showItems(item.Key, item.Value);
+                ShowItems(item.Key, item.Value);
             }
             inventoryChanged = false;
         }
     }
 
-    public void getTools(List<string> tools)
+    public void AddItems(string name, int amout)
     {
+
+    }
+
+    public void GetTools()
+    {
+
         if (newTools == true)
         {
             foreach (var item in tools)
@@ -118,7 +138,7 @@ public class InventoryManagement : MonoBehaviour {
     }
 
 
-    public void moveHighlight()
+    public void MoveHighlight()
     {
         int nextSlot;
         inventorySlots[highlightIndex].transform.Find("Highlight").GetComponent<Image>().color = defaultColor;

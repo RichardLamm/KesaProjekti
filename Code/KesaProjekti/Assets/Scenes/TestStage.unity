@@ -1254,6 +1254,7 @@ MonoBehaviour:
   toolBelt: {fileID: 1218255606}
   resourceSlot: {fileID: 1989479369019876, guid: 1745b5feef079a642a10584cac75908e,
     type: 2}
+  resourceData: {fileID: 1656324093}
   inventorySize: 20
   inventoryChanged: 1
   newTools: 1
