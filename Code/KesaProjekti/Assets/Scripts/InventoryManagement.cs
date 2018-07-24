@@ -26,12 +26,19 @@ public class InventoryManagement : MonoBehaviour {
     private int highlightIndex = 0;
     private Vector4 defaultColor = new Vector4(1, 1, 1, 1);
 
-     public struct stackData
+     public class stackData
     {
         public int stackSize;
         public int amount;
+
+        public stackData(int stack, int am)
+        {
+            stackSize = stack;
+            amount = am;
+        }
     }
 
+    
     // Use this for initialization
     public void CreateInventorySlots () {
         for (int x = 0; x < inventorySize; x++)
@@ -53,7 +60,7 @@ public class InventoryManagement : MonoBehaviour {
     {
         foreach (string resource in startingResources)
         {
-            stackData stackInfo;
+            stackData stackInfo = new stackData(-1, -1);
             stackInfo.stackSize = resourceData.GetStackSize(resource);
             stackInfo.amount = stackInfo.stackSize;
             items[resource] = stackInfo;
@@ -114,9 +121,19 @@ public class InventoryManagement : MonoBehaviour {
         }
     }
 
-    public void AddItems(string name, int amout)
-    {
-
+    public void AddItems(string name, int newItems)
+    {     
+        if (items.ContainsKey(name) != false)
+        {
+            items[name].amount = items[name].amount + newItems;
+        }
+        else
+        {
+            stackData stackInfo = new stackData(-1, -1);
+            stackInfo.stackSize = resourceData.GetStackSize(name);
+            stackInfo.amount = newItems;
+            items[name] = stackInfo;
+        }
     }
 
     public void GetTools()

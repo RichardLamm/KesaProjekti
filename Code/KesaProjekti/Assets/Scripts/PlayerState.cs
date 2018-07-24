@@ -242,15 +242,9 @@ public class PlayerState : MonoBehaviour {
                     gatherThread.Join();
                     int amount = (int)pair.gatherAmount;
                     string key = pair.gatherName;
-                    if (items.ContainsKey(key) != false)
-                    {
-                        items[key] = items[key] + amount;
-                    }
-                    else
-                    {
-                        items[key] = amount;
-                    }
+                    inventoryScript.AddItems(key, amount);
                     inventoryScript.inventoryChanged = true;
+                    inventoryScript.GetItems();
                     //inventoryScript.valueNeedsUpdating("minerals", amount);
                 }
                 state = playerState.Idle;
