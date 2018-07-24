@@ -78,6 +78,7 @@ public class MapGeneration : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
+        dataParser.readData();
         InitTiles();
         offset = (int)Random.Range(0f, 1000f);
         GenerateIsland();
@@ -96,8 +97,7 @@ public class MapGeneration : MonoBehaviour {
         PlayerState playerScript = GameObject.Find("Player").GetComponent<PlayerState>();
         playerScript.SetSelfPosition();
         SmoothEdges();
-
-        dataParser.readData();
+        
     }
 
     public void SmoothEdges()

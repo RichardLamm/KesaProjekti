@@ -6,11 +6,13 @@ using System.IO;
 public class JsonData : MonoBehaviour
 {
     private string path = "/GameData/resources.json";
-    private Dictionary<string, ResourceData> database = new Dictionary<string, ResourceData>(); 
+    private Dictionary<string, ResourceData> database = new Dictionary<string, ResourceData>();
+    private Dictionary<string, int> inventoryDatabase = new Dictionary<string, int>();
 
     [System.Serializable]
     public class ResourceData
     {
+        public string tile;
         public string resource;
         public int stackSize;
         public int harvestTime;
@@ -51,12 +53,12 @@ public class JsonData : MonoBehaviour
             string json = File.ReadAllText(dataPath);
             ResourceData[] data = JsonHelper.FromJson<ResourceData>(json);
             //DataWrapper[] player = JsonHelper.ToJson(json);
-            Debug.Log(data[0].resource);
-            Debug.Log(data[1].resource);
 
             foreach (ResourceData dataPoint in data)
             {
-                database.Add(dataPoint.resource, dataPoint);
+                database.Add(dataPoint.tile, dataPoint);
+                inventoryDatabase.Add(dataPoint.resource, dataPoint.stackSize);
+                
             }
 
         }
