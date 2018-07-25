@@ -19,10 +19,6 @@ public class TileRule : MonoBehaviour {
     public Tile TileBotLeft;
     public Tile TileTopBot;
     public Tile TileLeftRight;
-    public Tile TileAllButTopRightCorner;
-    public Tile TileAllButTopLeftCorner;
-    public Tile TileAllButBotRightCorner;
-    public Tile TileAllButBotLeftCorner;
     public Tile TileAllButTop;
     public Tile TileAllButRight;
     public Tile TileAllButBottom;
@@ -48,19 +44,9 @@ public class TileRule : MonoBehaviour {
         byte type = 0;
         Tile tempTile = self;
         string selfName = self.name;
-        if (map.GetTile(new Vector3Int((int)position.x + 1, (int)position.y + 1, 0)) != null)
-        {
-            if (CheckAllowed(map.GetTile(new Vector3Int((int)position.x + 1, (int)position.y + 1, 0)).name)) { type += 1; } // Top right
-        }
-        type <<= 1;
         if (map.GetTile(new Vector3Int((int)position.x, (int)position.y + 1, 0)) != null)
         {
             if (CheckAllowed(map.GetTile(new Vector3Int((int)position.x, (int)position.y + 1, 0)).name)) { type += 1; } // Top
-        }
-        type <<= 1;
-        if (map.GetTile(new Vector3Int((int)position.x - 1, (int)position.y + 1, 0)) != null)
-        {
-            if (CheckAllowed(map.GetTile(new Vector3Int((int)position.x - 1, (int)position.y + 1, 0)).name)) { type += 1; } // Top left
         }
         type <<= 1;
         if (map.GetTile(new Vector3Int((int)position.x + 1, (int)position.y, 0)) != null)
@@ -73,23 +59,13 @@ public class TileRule : MonoBehaviour {
             if (CheckAllowed(map.GetTile(new Vector3Int((int)position.x - 1, (int)position.y, 0)).name)) { type += 1; } // Left
         }
         type <<= 1;
-        if (map.GetTile(new Vector3Int((int)position.x + 1, (int)position.y - 1, 0)) != null)
-        {
-            if (CheckAllowed(map.GetTile(new Vector3Int((int)position.x + 1, (int)position.y - 1, 0)).name)) { type += 1; } // Bot right
-        }
-        type <<= 1;
         if (map.GetTile(new Vector3Int((int)position.x, (int)position.y - 1, 0)) != null)
         {
             if (CheckAllowed(map.GetTile(new Vector3Int((int)position.x, (int)position.y - 1, 0)).name)) { type += 1; } // Bot
         }
-        type <<= 1;
-        if (map.GetTile(new Vector3Int((int)position.x - 1, (int)position.y - 1, 0)) != null)
-        {
-            if (CheckAllowed(map.GetTile(new Vector3Int((int)position.x - 1, (int)position.y - 1, 0)).name)) { type += 1; } // Bot left
-        }
 
         // Most common case, so early out if this is the case
-        if(type == 255)
+        if(type == 15)
         {
             tempTile = TileAllAround;
             tempTile.gameObject = self.gameObject;
@@ -103,123 +79,63 @@ public class TileRule : MonoBehaviour {
             return tempTile;
         }
 
-        //  32  64  128
-        //  8       16
-        //  1   2   4
+        //  /   8   \
+        //  2       4
+        //  \   1   /
 
         switch (type)
         {
             // Single neighbours
-            case 2: // Only bottom
-            case 3:
-            case 6:
-            case 7:
+            case 1: // Only bottom
                 tempTile = TileBottom;
                 break;          
-            case 8: // Only left
-            case 9:
-            case 40:
-            case 41:
+            case 2: // Only left
                 tempTile = TileLeft;
                 break;
-            case 16: // Only rigth
-            case 20:
-            case 144:
-            case 148:
+            case 4: // Only rigth
                 tempTile = TileRight;
                 break;
-            case 64: // Only top
-            case 98:
-            case 192:
-            case 224:
+            case 8: // Only top
                 tempTile = TileTop;
                 break;
-            case 254: // All but bottom left corner
-                tempTile = TileAllButBotLeftCorner;
+
+            // Two neighbours
+            case 5: // Bottom right
+                tempTile = TileBotRight;
                 break;
-            case 223: // All but top left corner
-                tempTile = TileAllButTopLeftCorner;
+            case 3: // Bottom left
+                tempTile = TileBotLeft;
                 break;
-            case 127: // All but top Right corner
-                tempTile = TileAllButTopRightCorner;
+            case 12: // Top right
+                tempTile = TileTopRight;
                 break;
-            case 251: // All but bottom right corner
-                tempTile = TileAllButBotRightCorner;
+            case 10: // Top left
+                tempTile = TileTopLeft;
+                break;
+            case 9: // Top bottom
+                tempTile = TileTopBot;
+                break;
+            case 6: // Right left
+                tempTile = TileLeftRight;
                 break;
 
             // Three neighbours
-            case 22: // Right bottom with corner
-                tempTile = TileBotRight;
+            case 7: // All but top
+                tempTile = TileAllButTop;
                 break;
-            case 11: // Left bottom with corner
-                tempTile = TileBotLeft;
+            case 11: // All but right
+                tempTile = TileAllButRight;
                 break;
-            case 208: // Right top with corner
-                tempTile = TileTopRight;
+            case 14: // All but bottom
+                tempTile = TileAllButBottom;
                 break;
-            case 104: // Left top with corner
-                tempTile = TileTopLeft;
+            case 13: // All but left
+                tempTile = TileAllButLeft;
                 break;
-
+            case 15: // All sides
+                tempTile = TileAllAround;
+                break;
             default:
-                byte sides = 0;
-                sides += (byte)((type >> 6) % 2);
-                sides <<= 1;
-                sides += (byte)((type >> 4) % 2);
-                sides <<= 1;
-                sides += (byte)((type >> 3) % 2);
-                sides <<= 1;
-                sides += (byte)((type >> 1) % 2);
-                switch (sides)
-                {
-                    case 1: // Only bottom
-                        tempTile = TileBottom;
-                        break;
-                    case 2: // Only left
-                        tempTile = TileLeft;
-                        break;
-                    case 4: // Only right
-                        tempTile = TileRight;
-                        break;
-                    case 8: // Only top
-                        tempTile = TileTop;
-                        break;
-                    case 5: // Bottom right
-                        tempTile = TileBotRight;
-                        break;
-                    case 3: // Bottom left
-                        tempTile = TileBotLeft;
-                        break;
-                    case 12: // Top right
-                        tempTile = TileTopRight;
-                        break;
-                    case 10: // Top left
-                        tempTile = TileTopLeft;
-                        break;
-                    case 9: // Top bottom
-                        tempTile = TileTopBot;
-                        break;
-                    case 6: // Right left
-                        tempTile = TileLeftRight;
-                        break;
-                    case 7: // All but top
-                        tempTile = TileAllButTop;
-                        break;
-                    case 11: // All but right
-                        tempTile = TileAllButRight;
-                        break;
-                    case 14: // All but bottom
-                        tempTile = TileAllButBottom;
-                        break;
-                    case 13: // All but left
-                        tempTile = TileAllButLeft;
-                        break;
-                    case 15: // All sides
-                        tempTile = TileAllAround;
-                        break;
-                    default:
-                        break;
-                } // switch(sides)
                 break;
         } // switch(type)
         tempTile.gameObject = self.gameObject;
