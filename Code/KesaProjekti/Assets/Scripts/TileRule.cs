@@ -71,13 +71,6 @@ public class TileRule : MonoBehaviour {
             tempTile.gameObject = self.gameObject;
             return tempTile;
         }
-        // Early out and set self to tile without similar neighbours
-        if (type == 0)
-        {
-            tempTile = TileWithoutNeighbours;
-            tempTile.gameObject = self.gameObject;
-            return tempTile;
-        }
 
         //  /   8   \
         //  2       4
@@ -136,6 +129,7 @@ public class TileRule : MonoBehaviour {
                 tempTile = TileAllAround;
                 break;
             default:
+                tempTile = TileWithoutNeighbours;
                 break;
         } // switch(type)
         tempTile.gameObject = self.gameObject;

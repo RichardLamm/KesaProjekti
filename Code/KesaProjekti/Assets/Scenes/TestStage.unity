@@ -1317,14 +1317,6 @@ MonoBehaviour:
   TileBotLeft: {fileID: 11400000, guid: 2faf8b33e95a8944d9fff11d0737ea0a, type: 2}
   TileTopBot: {fileID: 11400000, guid: d69a428c95f7e5745ba2493f59299291, type: 2}
   TileLeftRight: {fileID: 11400000, guid: d69a428c95f7e5745ba2493f59299291, type: 2}
-  TileAllButTopRightCorner: {fileID: 11400000, guid: c1205c0b7cd85d94691b39e12ce7090e,
-    type: 2}
-  TileAllButTopLeftCorner: {fileID: 11400000, guid: a8add3375fe738740a16d4a0f25fe4c6,
-    type: 2}
-  TileAllButBotRightCorner: {fileID: 11400000, guid: be85145458a909d47b7e1162cd134753,
-    type: 2}
-  TileAllButBotLeftCorner: {fileID: 11400000, guid: eed514d79c467c64f9afc453116fa509,
-    type: 2}
   TileAllButTop: {fileID: 11400000, guid: 453130442d8e65b4691ed11d3966a3b0, type: 2}
   TileAllButRight: {fileID: 11400000, guid: d36b4c1ef8711b24fb832f8390fd4cc7, type: 2}
   TileAllButBottom: {fileID: 11400000, guid: af079040a6a65e942b74aeac2e5795cc, type: 2}
@@ -2189,14 +2181,6 @@ MonoBehaviour:
   TileBotLeft: {fileID: 11400000, guid: fdb3d7f0de0898145be467fcd00c78f2, type: 2}
   TileTopBot: {fileID: 11400000, guid: bbbf83d2ff0c17d43a8835fa05e2b0a5, type: 2}
   TileLeftRight: {fileID: 11400000, guid: c6d244dedf7c10140962d21f707cde2c, type: 2}
-  TileAllButTopRightCorner: {fileID: 11400000, guid: 934cce197cf683545a9a50686a961d45,
-    type: 2}
-  TileAllButTopLeftCorner: {fileID: 11400000, guid: 1bedd2819d5faf54aa5135258108001c,
-    type: 2}
-  TileAllButBotRightCorner: {fileID: 11400000, guid: b927c5cc87e17a44b9de2c1880e169b9,
-    type: 2}
-  TileAllButBotLeftCorner: {fileID: 11400000, guid: 5ecccf0fc45aba247b2450ed159c5c3f,
-    type: 2}
   TileAllButTop: {fileID: 11400000, guid: fad45c7f2101dcb49a33ebff9f9f2292, type: 2}
   TileAllButRight: {fileID: 11400000, guid: 0363747817af59d49b5d92f06ee97903, type: 2}
   TileAllButBottom: {fileID: 11400000, guid: 190c703a2eb19744581f8cf5b54d9ab9, type: 2}
