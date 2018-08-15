@@ -8,6 +8,7 @@ public class JsonData : MonoBehaviour
     private string path = "/GameData/resources.json";
     private Dictionary<string, ResourceData> database = new Dictionary<string, ResourceData>();
     private Dictionary<string, int> inventoryDatabase = new Dictionary<string, int>();
+    private Dictionary<string, Resources[]> itemDatabase = new Dictionary<string, Resources[]>();
 
     [System.Serializable]
     public class ResourceData
@@ -65,9 +66,12 @@ public class JsonData : MonoBehaviour
         if (File.Exists(dataPath))
         {
             string json = File.ReadAllText(dataPath);
-            var myObject = JsonUtility.FromJson<CraftableItems>("{\"Items\":" + json + "}");
-
-            //Debug.Log(myObject.Items[1].resourcesNeeded[2].amount);
+            var itemList = JsonUtility.FromJson<CraftableItems>("{\"Items\":" + json + "}");
+            foreach(ItemList item in itemList.Items)
+            {
+                itemDatabase[item.item] = item.resourcesNeeded;
+            }
+            //Debug.Log(itemDatabase["axe"][0].resource);
         }
     }
 
