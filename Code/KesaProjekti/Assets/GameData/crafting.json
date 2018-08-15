@@ -1,6 +1,6 @@
 [
     {
-        "item": "pickaxe",
+        "item": "Pickaxe",
         "resourcesNeeded": [
             {
                 "resource": "wood",
@@ -13,7 +13,7 @@
         ]
     },
 	{
-        "item": "axe",
+        "item": "Axe",
         "resourcesNeeded": [
             {
                 "resource": "wood",

@@ -36,6 +36,7 @@ public class PlayerState : MonoBehaviour {
     public Tilemap nodeMap;
     public InventoryManagement inventoryScript;
     public MapGeneration mapScript;
+    public Crafting craftingScript;
 
     private List<string> tools = new List<string> { "axe", "bucket", "pick", "scythe" };
     private Dictionary<string, int> items = new Dictionary<string, int>() { { "wood", 100 }, { "gold", 10 }, { "minerals", 30 } };
@@ -58,6 +59,8 @@ public class PlayerState : MonoBehaviour {
         inventoryScript.CreateStartingInventory();
         inventoryScript.GetItems();
         inventoryScript.GetTools();
+        craftingScript.CreateCraftingList();
+
     }
 	
 	// Update is called once per frame
