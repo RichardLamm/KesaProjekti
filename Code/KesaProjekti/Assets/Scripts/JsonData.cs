@@ -36,14 +36,7 @@ public class JsonData : MonoBehaviour
         var wrappedJsonArray = JsonUtility.FromJson<DataWrapper>(json);
     }
 
-    [System.Serializable]
-    public class Player
-    {
-
-        public string playerId;
-        public int playerLoc;
-
-    }
+    
 
     public void readData()
     {
@@ -60,10 +53,46 @@ public class JsonData : MonoBehaviour
                 inventoryDatabase[dataPoint.resource] = dataPoint.stackSize;
 
             }
+            readCraftingData();
 
         }
         
+
     }
+    public void readCraftingData()
+    {
+        string dataPath = Application.dataPath + "/GameData/crafting.json";
+        if (File.Exists(dataPath))
+        {
+            string json = File.ReadAllText(dataPath);
+            var myObject = JsonUtility.FromJson<CraftableItems>("{\"Items\":" + json + "}");
+
+            //Debug.Log(myObject.Items[1].resourcesNeeded[2].amount);
+        }
+    }
+
+
+    [System.Serializable]
+    public class CraftableItems
+    {
+        public ItemList[] Items;
+    }
+
+    [System.Serializable]
+    public class Resources
+    {
+        public string resource;
+        public int amount;
+    }
+
+    [System.Serializable]
+    public class ItemList
+    {
+        public string item;
+        public Resources[] resourcesNeeded;
+    }
+
+
 
     public int GetStackSize(string resource)
     {

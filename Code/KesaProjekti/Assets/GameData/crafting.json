@@ -1,0 +1,32 @@
+[
+    {
+        "item": "pickaxe",
+        "resourcesNeeded": [
+            {
+                "resource": "wood",
+                "amount": 25
+            },
+			{
+                "resource": "rock",
+                "amount": 10
+            }
+        ]
+    },
+	{
+        "item": "axe",
+        "resourcesNeeded": [
+            {
+                "resource": "wood",
+                "amount": 12
+            },
+			{
+                "resource": "rock",
+                "amount": 15
+            },
+			{
+                "resource": "asd",
+                "amount": 567
+            }
+        ]
+    }
+]
