@@ -9,6 +9,10 @@ public class TileScript : MonoBehaviour {
     private uint amount_ = 0;
     private float gatherTime_ = 0;
     private string resourceName_;
+    private float spreadingInterval = 5f;
+    public Tilemap map;
+    public Tilemap nodes;
+    private Vector3Int selfPosition;
 
     public struct GatherPair
     {

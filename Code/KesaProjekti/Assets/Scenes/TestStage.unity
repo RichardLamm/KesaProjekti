@@ -1321,6 +1321,7 @@ MonoBehaviour:
     m_Position: {x: 0, y: 0, z: 0}
     m_Size: {x: 3, y: 3, z: 1}
   map: {fileID: 455596050}
+  nodes: {fileID: 0}
   TileAllAround: {fileID: 11400000, guid: 0b3f7395e37fc154d947e298b506dfe9, type: 2}
   TileWithoutNeighbours: {fileID: 11400000, guid: d0f71a5a47948f64ca793094aab83171,
     type: 2}
@@ -1350,6 +1351,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e44bf8144a5835a4c986de9074548fee, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  map: {fileID: 0}
+  nodes: {fileID: 0}
 --- !u!1 &1186954651
 GameObject:
   m_ObjectHideFlags: 0
@@ -1739,6 +1742,7 @@ GameObject:
   - component: {fileID: 1656324090}
   - component: {fileID: 1656324092}
   - component: {fileID: 1656324093}
+  - component: {fileID: 1656324094}
   m_Layer: 0
   m_Name: Grid
   m_TagString: Untagged
@@ -1814,6 +1818,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 14999fc0166e7034bbaa819f2b09bab6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &1656324094
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1656324089}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 81b07b905b019c94c87eedc97325b5a1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  map: {fileID: 455596050}
+  nodes: {fileID: 174381622}
 --- !u!1 &1663373097
 GameObject:
   m_ObjectHideFlags: 0
@@ -2053,6 +2070,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e44bf8144a5835a4c986de9074548fee, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  map: {fileID: 455596050}
+  nodes: {fileID: 174381622}
 --- !u!4 &1905200173
 Transform:
   m_ObjectHideFlags: 0
@@ -2168,6 +2187,7 @@ MonoBehaviour:
     m_Position: {x: 0, y: 0, z: 0}
     m_Size: {x: 3, y: 3, z: 1}
   map: {fileID: 455596050}
+  nodes: {fileID: 0}
   TileAllAround: {fileID: 11400000, guid: f77946aded0335c4da1cce689ee2d216, type: 2}
   TileWithoutNeighbours: {fileID: 11400000, guid: 203d68c1364cd3c4aa06e1294508115a,
     type: 2}
@@ -2197,3 +2217,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e44bf8144a5835a4c986de9074548fee, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  map: {fileID: 0}
+  nodes: {fileID: 0}

@@ -7,6 +7,7 @@ public class TileRule : MonoBehaviour {
 
     public BoundsInt aroundSelf;
     public Tilemap map;
+    public Tilemap nodes;
     public Tile TileAllAround;
     public Tile TileWithoutNeighbours;
     public Tile TileTop;
@@ -23,7 +24,7 @@ public class TileRule : MonoBehaviour {
     public Tile TileAllButRight;
     public Tile TileAllButBottom;
     public Tile TileAllButLeft;
-    public List<string> allowedTiles; 
+    public List<string> allowedTiles;
 
     public void SetAllowedTiles(List<string> tiles)
     {

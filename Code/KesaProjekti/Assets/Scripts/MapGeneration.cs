@@ -27,6 +27,7 @@ public class MapGeneration : MonoBehaviour {
     public int randomLength = 30;
     public int centerRadius = 10;
     private int lastDirection = -1;
+    private List<Vector3Int> tempEdges = new List<Vector3Int>();
 
     public JsonData dataParser;
 
@@ -97,7 +98,7 @@ public class MapGeneration : MonoBehaviour {
         PlayerState playerScript = GameObject.Find("Player").GetComponent<PlayerState>();
         playerScript.SetSelfPosition();
         SmoothEdges();
-        
+        GameObject.Find("Grid").GetComponent<Environment>().Ready();
     }
 
     public void SmoothEdges()
@@ -158,11 +159,41 @@ public class MapGeneration : MonoBehaviour {
         }
         for(int i = 0; i < amount; i++)
         {
+            if (tempEdges.Count != 0 && nodetype.GetSelf() == tree) { tempEdges.Clear(); }
             int iterator = Random.Range(0, availableSpawns.Count);
             SpawnPoint spawn = availableSpawns[iterator];
             GenerateArea(size, spawn.x, spawn.y, nodetype, true);
             availableSpawns.Remove(spawn);
-        }
+            if (nodetype.GetSelf() == tree)
+            {
+                List<Vector3Int> actualEdges = new List<Vector3Int>();
+                if(tempEdges.Count == 0) { continue; } // for(amount)
+                foreach (Vector3Int selfPosition in tempEdges)
+                {
+                    if (nodes.GetTile(new Vector3Int(selfPosition.x + 1, selfPosition.y, 0)) == null)
+                    {
+                        actualEdges.Add(selfPosition);
+                        continue;
+                    }
+                    else if (nodes.GetTile(new Vector3Int(selfPosition.x, selfPosition.y + 1, 0)) == null)
+                    {
+                        actualEdges.Add(selfPosition);
+                        continue;
+                    }
+                    else if (nodes.GetTile(new Vector3Int(selfPosition.x - 1, selfPosition.y, 0)) == null)
+                    {
+                        actualEdges.Add(selfPosition);
+                        continue;
+                    }
+                    else if (nodes.GetTile(new Vector3Int(selfPosition.x, selfPosition.y - 1, 0)) == null)
+                    {
+                        actualEdges.Add(selfPosition);
+                        continue;
+                    }
+                }
+                GameObject.Find("Grid").GetComponent<Environment>().AddForest(actualEdges);
+            }
+        }        
     }
 
     public Dictionary<string, List<SpawnPoint>> GetSpawnPoints()
@@ -265,6 +296,19 @@ public class MapGeneration : MonoBehaviour {
 
     }
 
+    private void SetNewTileOnNodes(Vector3Int position, Tile tile)
+    {
+        if (tile == water)
+        {
+            map.SetTile(position, tile);
+        }
+        nodes.SetTile(position, tile);
+        if(tile == tree)
+        {
+            tempEdges.Add(position);
+        }
+    }
+
     void GenerateArea(int length, int x, int y, TileRules tile, bool onExisting = false)
     {
         if (Random.Range(0, 10) > 5) { length -= 1; }
@@ -277,20 +321,12 @@ public class MapGeneration : MonoBehaviour {
         {
             if (CheckTilesAt(x, y, nodes, tile) && CheckTilesAt(x, y, map, tile))
             {
-                if(tile.GetSelf() == water)
-                {
-                    map.SetTile(new Vector3Int(x, y, 0), water);
-                }
-                nodes.SetTile(new Vector3Int(x, y, 0), tile.GetSelf());
+                SetNewTileOnNodes(new Vector3Int(x, y, 0), tile.GetSelf());
             }
         }
         else if (!onExisting && CheckTilesAt(x, y, nodes, tile) && CheckTilesAt(x, y, map, tile))
         {
-            if (tile.GetSelf() == water)
-            {
-                map.SetTile(new Vector3Int(x, y, 0), water);
-            }
-            nodes.SetTile(new Vector3Int(x, y, 0), tile.GetSelf());
+            SetNewTileOnNodes(new Vector3Int(x, y, 0), tile.GetSelf());
         }
 
         bool TilesAdded = false;
@@ -302,11 +338,7 @@ public class MapGeneration : MonoBehaviour {
                 {
                     if ((onExisting && map.GetTile(new Vector3Int(x, y + north, 0)) == null)){ break; }
                     TilesAdded = true;
-                    if (tile.GetSelf() == water)
-                    {
-                        map.SetTile(new Vector3Int(x, y + north, 0), water);
-                    }
-                    nodes.SetTile(new Vector3Int(x, y + north, 0), tile.GetSelf());
+                    SetNewTileOnNodes(new Vector3Int(x, y + north, 0), tile.GetSelf());
                 }
                 else { break; }
             }
@@ -319,11 +351,7 @@ public class MapGeneration : MonoBehaviour {
                 {
                     if (onExisting && map.GetTile(new Vector3Int(x - west, y, 0)) == null) { break; }
                     TilesAdded = true;
-                    if (tile.GetSelf() == water)
-                    {
-                        map.SetTile(new Vector3Int(x - west, y, 0), water);
-                    }
-                    nodes.SetTile(new Vector3Int(x - west, y, 0), tile.GetSelf());
+                    SetNewTileOnNodes(new Vector3Int(x - west, y, 0), tile.GetSelf());
                 }
                 else { break; }
             }
@@ -336,11 +364,7 @@ public class MapGeneration : MonoBehaviour {
                 {
                     if (onExisting && map.GetTile(new Vector3Int(x, y - south, 0)) == null) { break; }
                     TilesAdded = true;
-                    if (tile.GetSelf() == water)
-                    {
-                        map.SetTile(new Vector3Int(x, y - south, 0), water);
-                    }
-                    nodes.SetTile(new Vector3Int(x, y - south, 0), tile.GetSelf());
+                    SetNewTileOnNodes(new Vector3Int(x, y - south, 0), tile.GetSelf());
                 }
                 else { break; }
             }
@@ -353,11 +377,7 @@ public class MapGeneration : MonoBehaviour {
                 {
                     if (onExisting && map.GetTile(new Vector3Int(x + east, y, 0)) == null) { break; }
                     TilesAdded = true;
-                    if (tile.GetSelf() == water)
-                    {
-                        map.SetTile(new Vector3Int(x + east, y, 0), water);
-                    }
-                    nodes.SetTile(new Vector3Int(x + east, y, 0), tile.GetSelf());
+                    SetNewTileOnNodes(new Vector3Int(x + east, y, 0), tile.GetSelf());
                 }
                 else { break; }
             }
