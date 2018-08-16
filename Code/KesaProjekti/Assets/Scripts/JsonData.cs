@@ -110,9 +110,9 @@ public class JsonData : MonoBehaviour
             return -1;
         }
     }
-    public Dictionary<string, Resources[]> ReturnCraftingList()
+    public Dictionary<string, Resources[]>.KeyCollection ReturnCraftingList()
     {
-        return itemDatabase;
+        return itemDatabase.Keys;
     }
 public static class JsonHelper
 {

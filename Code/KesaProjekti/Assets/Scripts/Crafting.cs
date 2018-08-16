@@ -26,10 +26,9 @@ public class Crafting : MonoBehaviour {
         foreach(var item in craftingDict)
         {
             GameObject button = Instantiate(buttonPrefab);
-            button.GetComponentInChildren<Text>().text = item.Key;
+            button.GetComponentInChildren<Text>().text = item;
             button.GetComponent<RectTransform>().SetParent(craftingList.transform);
             button.transform.localScale = new Vector3(1, 1, 0);
-            Debug.Log(item.Key);
         }
 
         
