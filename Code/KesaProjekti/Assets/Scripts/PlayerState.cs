@@ -59,7 +59,7 @@ public class PlayerState : MonoBehaviour {
         inventoryScript.CreateStartingInventory();
         inventoryScript.GetItems();
         inventoryScript.GetTools();
-        craftingScript.CreateCraftingList();
+        craftingScript.InstatiateCraftingUi();
 
     }
 	

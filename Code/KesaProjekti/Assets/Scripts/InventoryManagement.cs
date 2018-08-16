@@ -65,7 +65,7 @@ public class InventoryManagement : MonoBehaviour {
             stackInfo.amount = stackInfo.stackSize;
             items[resource] = stackInfo;
         }
-        Debug.Log(items.Count);
+        //Debug.Log(items.Count);
     }
 
 	// Update is called once per frame

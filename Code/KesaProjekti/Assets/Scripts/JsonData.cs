@@ -114,6 +114,11 @@ public class JsonData : MonoBehaviour
     {
         return itemDatabase.Keys;
     }
+
+    public Resources[] ReturnNeededResources(string item)
+    {
+        return itemDatabase[item];
+    }
 public static class JsonHelper
 {
 
