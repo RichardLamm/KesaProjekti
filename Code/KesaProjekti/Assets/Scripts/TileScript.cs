@@ -7,7 +7,7 @@ using UnityEngine.Tilemaps;
 public class TileScript : MonoBehaviour {
 
     private uint amount_ = 0;
-    private float gatherTime_ = 0;
+    private int gatherTime_ = 0;
     private string resourceName_;
     private float spreadingInterval = 5f;
     public Tilemap map;
@@ -25,20 +25,24 @@ public class TileScript : MonoBehaviour {
     }
 
     // Store values to the class
-    public void Init(string name, uint amount, float gatherTime)
+    public void Init(string name, uint amount)
     {
-        resourceName_ = name;
-        amount_ = amount;
-        gatherTime_ = gatherTime;
+        if (name == "rock" || name == "tree") // Debug
+        {
+            JsonData.ResourceData data = GameObject.Find("Grid").GetComponent<JsonData>().GetData(name);
+            if (data == null) { return; }
+            resourceName_ = data.resource;
+            gatherTime_ = data.harvestTime;
+
+            // TODO: add actual amounts
+            amount_ = amount;
+        }
     }
 
     // Returns pair containing amount of gathered resource and it's name
     public GatherPair Gather(string toolName)
     {
-        // Get data from the data base according to the tile and tool
-        // TODO: get sleepTime, amount and resourceName from the data base
-        int sleepTime = 500;
-        Thread.Sleep(sleepTime);
+        Thread.Sleep(gatherTime_);
         return new GatherPair(amount_, resourceName_);
     }
 }

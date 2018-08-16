@@ -57,7 +57,6 @@ public class Environment : MonoBehaviour {
         {
             if(self.Count == 0) { continue; }
             int node = Random.Range(0, self.Count);
-            if(self[node] == null) { continue; }
             int spreadDirection = direction.RandomizeDir();
             Vector3Int spreadPosition = new Vector3Int();
             Vector3Int selfPosition = self[node];

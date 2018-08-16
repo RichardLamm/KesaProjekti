@@ -134,7 +134,7 @@ public class MapGeneration : MonoBehaviour {
         {
             tile.gameObject = Instantiate(TilePrefab);
         }
-        tile.gameObject.GetComponent<TileScript>().Init(tile.name, amount, time);
+        tile.gameObject.GetComponent<TileScript>().Init(tile.name, amount);
     }
 
     void InitTiles()

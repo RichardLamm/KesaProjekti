@@ -13,6 +13,17 @@ public class JsonData : MonoBehaviour
     [System.Serializable]
     public class ResourceData
     {
+        /*--------------------------------------|
+        |                 TODO:                 |
+        |       nested list of resources        |
+        |       corresponding gather chances    |
+        |       corresponding gather amounts    |
+        |                                       |
+        |               example:                |
+        |       ["wood", "bark", "rubber"]      |
+        |       [ 100,      40,     20   ]      |
+        |       [  10,      4,      1    ]      |
+        |--------------------------------------*/
         public string tile;
         public string resource;
         public int stackSize;
@@ -37,7 +48,10 @@ public class JsonData : MonoBehaviour
         var wrappedJsonArray = JsonUtility.FromJson<DataWrapper>(json);
     }
 
-    
+    public ResourceData GetData(string key)
+    {
+        return database[key];
+    }
 
     public void readData()
     {
