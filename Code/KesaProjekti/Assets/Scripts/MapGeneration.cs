@@ -121,7 +121,7 @@ public class MapGeneration : MonoBehaviour {
         }
     }
 
-    void InitTile(Tile tile, uint amount, float time)
+    void InitTile(Tile tile)
     {
         if (tile == grass) {
             tile.gameObject = Instantiate(GameObject.Find("GrassTile"));
@@ -134,7 +134,8 @@ public class MapGeneration : MonoBehaviour {
         {
             tile.gameObject = Instantiate(TilePrefab);
         }
-        tile.gameObject.GetComponent<TileScript>().Init(tile.name, amount);
+        tile.gameObject.transform.SetParent(GameObject.Find("Prefabs").transform);
+        tile.gameObject.GetComponent<TileScript>().Init(tile.name);
     }
 
     void InitTiles()
@@ -142,12 +143,12 @@ public class MapGeneration : MonoBehaviour {
         GameObject.Find("GrassTile").GetComponent<TileRule>().SetAllowedTiles(new List<string>() { "grass", "rock" });
         GameObject.Find("SandTile").GetComponent<TileRule>().SetAllowedTiles(new List<string>() { "sand", "grass", "water", "rock" });
         // Tile, amount, gather time
-        InitTile(grass, 5, 1);
-        InitTile(sand, 1, 1);
-        InitTile(water, 1, 1);
-        InitTile(tree, 10, 10);
-        InitTile(rock, 1, 5);
-        InitTile(ore, 1, 10);
+        InitTile(grass);
+        InitTile(sand);
+        InitTile(water);
+        InitTile(tree);
+        InitTile(rock);
+        InitTile(ore);
     }
 
     void GenerateNodes(TileRules nodetype, int amount, Dictionary<string, List<SpawnPoint>> spawns, int size)

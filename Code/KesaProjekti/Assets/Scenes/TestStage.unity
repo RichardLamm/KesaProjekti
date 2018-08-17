@@ -1672,7 +1672,7 @@ MonoBehaviour:
   tree: {fileID: 11400000, guid: 3e76e3c6c1554be48afadeb40245f0f3, type: 2}
   rock: {fileID: 11400000, guid: 7d1073264e3b7984086d411b23adaae5, type: 2}
   snowyRock: {fileID: 11400000, guid: e5d881d6238f78940969563739db8c44, type: 2}
-  ore: {fileID: 11400000, guid: e5d881d6238f78940969563739db8c44, type: 2}
+  ore: {fileID: 11400000, guid: b8ac7fee522e0c04097ce7c3050efe2e, type: 2}
   TilePrefab: {fileID: 1905200171}
   width: 640
   height: 480

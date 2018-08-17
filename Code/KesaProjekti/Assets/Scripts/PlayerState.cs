@@ -233,9 +233,10 @@ public class PlayerState : MonoBehaviour {
                 // If there are no nodes around, skip this
                 if (nodes.Count != 0)
                 {
-                    TileScript.GatherPair pair = new TileScript.GatherPair();
+                    List<JsonData.GainedResources> resources = new List<JsonData.GainedResources>();
+                    Debug.Log(nodes[0].name);
                     TileScript nodesScript = nodes[0].gameObject.GetComponent<TileScript>();
-                    Thread gatherThread = new Thread(() => { pair = nodesScript.Gather("axe"); });
+                    Thread gatherThread = new Thread(() => { resources = nodesScript.Gather(); });
                     gatherThread.Start();
                     while (gatherThread.IsAlive)
                     {
@@ -243,9 +244,17 @@ public class PlayerState : MonoBehaviour {
                         if (Input.GetButtonDown("Interrupt")){ gatherThread.Abort(); }
                     }
                     gatherThread.Join();
-                    int amount = (int)pair.gatherAmount;
-                    string key = pair.gatherName;
-                    inventoryScript.AddItems(key, amount);
+                    foreach (JsonData.GainedResources resource in resources)
+                    {
+                        if (Random.Range(0, 100) < resource.gatherChance)
+                        {
+                            // Add each successful gather into the list 
+                            inventoryScript.AddItems(resource.resource,
+                                                     Random.Range(resource.gatherAmountMin,
+                                                                 resource.gatherAmountMax));
+                        }
+                    }
+
                     inventoryScript.inventoryChanged = true;
                     inventoryScript.GetItems();
                     //inventoryScript.valueNeedsUpdating("minerals", amount);

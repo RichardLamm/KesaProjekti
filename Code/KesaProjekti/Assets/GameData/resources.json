@@ -1,6 +1,6 @@
 {
 	"Tiles": [
-	{           
+	{
 	"tile": "tree",
 	"harvestTime": 10,
 	"gainedResources": [
@@ -27,8 +27,8 @@
 				}
 				]
 	},
-	{   
-	"tile": "rock",	
+	{
+	"tile": "stone",	
 	"harvestTime": 15,
 	"gainedResources": [
 				{
@@ -53,7 +53,6 @@
 				"stackSize": 10
 				}
 				]
-	}   
+	}
 	]
 	}
-	
