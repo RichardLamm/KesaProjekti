@@ -2,15 +2,58 @@
 	"Tiles": [
 	{           
 	"tile": "tree",
-	"resource": "wood",            
-	"stackSize": 10,
-	"harvestTime": 10
+	"harvestTime": 10,
+	"gainedResources": [
+				{
+				"resource": "wood",
+				"gatherChance": 100,
+				"gatherAmountMax": 10,
+				"gatherAmountMin": 5,
+				"stackSize": 10
+				},
+				{
+				"resource": "bark",
+				"gatherChance": 40,
+				"gatherAmountMax": 15,
+				"gatherAmountMin": 2,
+				"stackSize": 10
+				},
+				{
+				"resource": "rubber",
+				"gatherChance": 20,
+				"gatherAmountMax": 8,
+				"gatherAmountMin": 2,
+				"stackSize": 10
+				}
+				]
 	},
 	{   
 	"tile": "rock",	
-	"resource": "minerals",
-	"stackSize": 2,
-	"harvestTime": 15
+	"harvestTime": 15,
+	"gainedResources": [
+				{
+				"resource": "rock",
+				"gatherChance": 100,
+				"gatherAmountMax": 13,
+				"gatherAmountMin": 5,
+				"stackSize": 20
+				},
+				{
+				"resource": "gold",
+				"gatherChance": 35,
+				"gatherAmountMax": 5,
+				"gatherAmountMin": 1,
+				"stackSize": 10
+				},
+				{
+				"resource": "mithril",
+				"gatherChance": 20,
+				"gatherAmountMax": 3,
+				"gatherAmountMin": 1,
+				"stackSize": 10
+				}
+				]
 	}   
-	]}
+	]
+	}
 	

@@ -27,16 +27,20 @@ public class TileScript : MonoBehaviour {
     // Store values to the class
     public void Init(string name, uint amount)
     {
-        if (name == "rock" || name == "tree") // Debug
-        {
-            JsonData.ResourceData data = GameObject.Find("Grid").GetComponent<JsonData>().GetData(name);
-            if (data == null) { return; }
-            resourceName_ = data.resource;
-            gatherTime_ = data.harvestTime;
 
-            // TODO: add actual amounts
-            amount_ = amount;
-        }
+
+        //Vilin muutokset:
+        //data.gainedResources[x] sisältää resurssien nimet yms.
+        //if (name == "rock" || name == "tree") // Debug
+        //{
+        //    JsonData.ResourceData data = GameObject.Find("Grid").GetComponent<JsonData>().GetData(name);
+        //    if (data == null) { return; }
+        //    resourceName_ = data.resource;
+        //    gatherTime_ = data.harvestTime;
+
+        //    // TODO: add actual amounts
+        //    amount_ = amount;
+        //}
     }
 
     // Returns pair containing amount of gathered resource and it's name

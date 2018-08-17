@@ -10,42 +10,29 @@ public class JsonData : MonoBehaviour
     private Dictionary<string, int> inventoryDatabase = new Dictionary<string, int>();
     private Dictionary<string, Resources[]> itemDatabase = new Dictionary<string, Resources[]>();
 
+    //Three classes for resource parsing
+    [System.Serializable]
+    public class TileList
+    {
+        public ResourceData[] Tiles;
+    }
+
+    [System.Serializable]
+    public class GainedResources
+    {
+        public string resource;
+        public int gatherChance;
+        public int gatherAmountMax;
+        public int gatherAmountMin;
+        public int stackSize;
+    }
+
     [System.Serializable]
     public class ResourceData
     {
-        /*--------------------------------------|
-        |                 TODO:                 |
-        |       nested list of resources        |
-        |       corresponding gather chances    |
-        |       corresponding gather amounts    |
-        |                                       |
-        |               example:                |
-        |       ["wood", "bark", "rubber"]      |
-        |       [ 100,      40,     20   ]      |
-        |       [  10,      4,      1    ]      |
-        |--------------------------------------*/
         public string tile;
-        public string resource;
-        public int stackSize;
         public int harvestTime;
-    }
-
-    [System.Serializable]
-    public class MyNestedObject
-    {
-        public int nestedVariable1;
-        public string nestedVariable2;
-    }
-
-    [System.Serializable]
-    public class DataWrapper
-    {
-        public List<ResourceData> objects;
-    }
-
-    void ParseJsonToObject(string json)
-    {
-        var wrappedJsonArray = JsonUtility.FromJson<DataWrapper>(json);
+        public GainedResources[] gainedResources;
     }
 
     public ResourceData GetData(string key)
@@ -59,15 +46,18 @@ public class JsonData : MonoBehaviour
         if (File.Exists(dataPath))
         {
             string json = File.ReadAllText(dataPath);
-            ResourceData[] data = JsonHelper.FromJson<ResourceData>(json);
-            //DataWrapper[] player = JsonHelper.ToJson(json);
+            var tileList = JsonUtility.FromJson<TileList>(json);
 
-            foreach (ResourceData dataPoint in data)
+            foreach (ResourceData dataPoint in tileList.Tiles)
             {
                 database.Add(dataPoint.tile, dataPoint);
-                inventoryDatabase[dataPoint.resource] = dataPoint.stackSize;
+                foreach(GainedResources resource in dataPoint.gainedResources)
+                {
+                    inventoryDatabase[resource.resource] = resource.stackSize;
+                   
+                }
 
-            }
+            } 
             readCraftingData();
 
         }
@@ -89,7 +79,7 @@ public class JsonData : MonoBehaviour
         }
     }
 
-
+    //Three classes for crafting item parsing
     [System.Serializable]
     public class CraftableItems
     {
@@ -133,28 +123,6 @@ public class JsonData : MonoBehaviour
     {
         return itemDatabase[item];
     }
-public static class JsonHelper
-{
-
-    public static T[] FromJson<T>(string json)
-    {
-        Wrapper<T> wrapper = JsonUtility.FromJson<Wrapper<T>>(json);
-        return wrapper.Tiles;
-    }
-
-    public static string ToJson<T>(T[] array)
-    {
-        Wrapper<T> wrapper = new Wrapper<T>();
-        wrapper.Tiles = array;
-        return JsonUtility.ToJson(wrapper);
-    }
-
-    [System.Serializable]
-    public class Wrapper<T>
-    {
-        public T[] Tiles;
-    }
-}
   
 
 }

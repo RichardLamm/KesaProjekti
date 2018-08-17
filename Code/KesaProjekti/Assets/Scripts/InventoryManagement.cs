@@ -21,7 +21,7 @@ public class InventoryManagement : MonoBehaviour {
 
     private List<string> tools = new List<string> { "axe", "bucket", "pick", "scythe" };
     private Dictionary<string, stackData> items = new Dictionary<string, stackData>() {};
-    private List<string> startingResources = new List<string> { "wood", "minerals"};
+    private List<string> startingResources = new List<string> { "wood", "rock"};
 
     private int highlightIndex = 0;
     private Vector4 defaultColor = new Vector4(1, 1, 1, 1);
